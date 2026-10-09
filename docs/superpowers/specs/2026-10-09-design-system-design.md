@@ -211,8 +211,9 @@ The placeholder home page is restyled into a hero and a sample section:
 - **Hero:**
   - `HeroBackground` behind everything.
   - Mono label "01 / React · React Native · Next.js".
-  - Name as a two-line `LineReveal` ("Naveen" / "Dwarapudi.", the second line in
-    accent).
+  - Full name as a three-line `LineReveal`: "Bhavani Sankar" (smaller, muted),
+    then "Naveen" and "Dwarapudi." (in accent). The `<h1>`'s accessible text is
+    the full name, "Bhavani Sankar Naveen Dwarapudi".
   - The resume positioning line.
   - `Magnetic` CTAs "View work" and "Download resume". In phase 2 these link to
     in-page anchors; their real targets are wired in phases 3 and 8.
@@ -227,6 +228,12 @@ The placeholder home page is restyled into a hero and a sample section:
     `Reveal`.
 
 No client names, product names or links appear (parent spec §5, amended).
+
+**Naming rule (owner):** the full name **Bhavani Sankar Naveen Dwarapudi** is used
+wherever space allows: the hero `<h1>`, the About section, the footer, the
+portrait alt text and Person structured data. The short name **Naveen
+Dwarapudi** is used where space is tight: `<title>`, Open Graph titles, compact
+nav and labels. The "ND." monogram stays as the logo.
 
 ---
 
@@ -273,5 +280,6 @@ No client names, product names or links appear (parent spec §5, amended).
 | Animation ambition | rich and interactive | owner direction, approved from a live prototype |
 | Client naming | withheld everywhere | confidentiality to the current employer; parent spec §5 amended |
 | Headline metric | "5 client engagements" | resolves parent spec §4 open item unambiguously |
+| Name display | full name where space allows, "Naveen Dwarapudi" where tight | owner rule |
 | Theme engine | hand-rolled | no dependency, minimal JS, no Next 16 compatibility risk |
 | Scroll reveals | CSS `view()` timeline | zero JS; never gates content |
