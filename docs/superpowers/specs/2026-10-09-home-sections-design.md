@@ -291,3 +291,10 @@ application)
 | Engagement cards | not links until phase 4 | no dead links |
 | Resume indexing | `X-Robots-Tag: noindex` now | the PDF goes public in this phase |
 | Contact framing | neutral, no "open to work" | the owner is currently employed |
+| Fonts | local subsets of Geist (400–500), Geist Mono (400), Bricolage (800) | the full Google Geist fonts cost ~2 simulated round trips of LCP |
+| Favicon | 309 B `icon.svg` monogram | the scaffold's 15 KB `favicon.ico` loaded before LCP |
+| Image format | AVIF then WebP | hero photo 7.3 → 5.5 KB; parent spec §2 |
+| About photo on phones | 280 px wide, after the text | Chrome fetched it before LCP despite `loading="lazy"` |
+| Skill cards | static `Card` + CSS `.hover-lift` | keeps 9 client islands out of the RSC payload |
+| Project link names | explicit `aria-label` | identical accessible names across engines |
+| Footer year | `"use cache"` `CopyrightYear` | Cache Components forbids `new Date()` in prerender |
