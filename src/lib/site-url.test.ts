@@ -11,7 +11,9 @@ describe("resolveSiteUrl", () => {
   });
 
   it("keeps a well-formed https origin", () => {
-    expect(resolveSiteUrl("https://naveen.dev").origin).toBe("https://naveen.dev");
+    expect(resolveSiteUrl("https://naveen.dev").origin).toBe(
+      "https://naveen.dev",
+    );
   });
 
   it("assumes https when the protocol is missing", () => {
@@ -26,10 +28,14 @@ describe("resolveSiteUrl", () => {
   });
 
   it("trims surrounding whitespace", () => {
-    expect(resolveSiteUrl("  https://naveen.dev  ").origin).toBe("https://naveen.dev");
+    expect(resolveSiteUrl("  https://naveen.dev  ").origin).toBe(
+      "https://naveen.dev",
+    );
   });
 
   it("throws a message naming the env var when malformed", () => {
-    expect(() => resolveSiteUrl("https://not a url")).toThrow(/NEXT_PUBLIC_SITE_URL/);
+    expect(() => resolveSiteUrl("https://not a url")).toThrow(
+      /NEXT_PUBLIC_SITE_URL/,
+    );
   });
 });
