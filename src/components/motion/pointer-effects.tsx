@@ -61,14 +61,7 @@ export function InteractiveCard({
         if (ref.current) ref.current.style.transform = "";
       }}
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background:
-            "radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%)",
-        }}
-      />
+      <div aria-hidden="true" className="card-glow" />
       <div className="relative">{children}</div>
     </div>
   );
