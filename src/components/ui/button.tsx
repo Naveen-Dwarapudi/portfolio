@@ -1,4 +1,5 @@
 import type { ComponentProps, ReactNode } from "react";
+import { newTabProps } from "./new-tab";
 
 type Variant = "primary" | "secondary";
 
@@ -44,12 +45,23 @@ export function Button({
 export function ButtonLink({
   variant = "primary",
   arrow,
+  newTabLabel,
   children,
   ...props
-}: ComponentProps<"a"> & { variant?: Variant; arrow?: string }) {
+}: ComponentProps<"a"> & {
+  variant?: Variant;
+  arrow?: string;
+  /** When set, opens in a new tab and appends this text for screen readers. */
+  newTabLabel?: string;
+}) {
   return (
-    <a className={buttonClass(variant)} {...props}>
+    <a
+      className={buttonClass(variant)}
+      {...newTabProps(newTabLabel)}
+      {...props}
+    >
       {children}
+      {newTabLabel ? <span className="sr-only"> {newTabLabel}</span> : null}
       {arrow ? <Arrow>{arrow}</Arrow> : null}
     </a>
   );

@@ -4,10 +4,18 @@ import { expect, test, type Page } from "@playwright/test";
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"];
 
 async function expectNoAxeViolations(page: Page) {
-  // Let entrance animations settle so axe sees final colours and opacity.
-  await page.waitForTimeout(1500);
+  // Reduced motion puts every scroll-reveal in its final, visible state, so
+  // axe checks the whole page rather than skipping not-yet-revealed sections.
+  // (colorScheme set by the caller is kept.)
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.waitForTimeout(500);
   const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
   expect(results.violations).toEqual([]);
+  // Guard against silently skipping content: axe ignores invisible nodes, so
+  // the contrast rule must actually have checked the whole page.
+  const contrastChecked =
+    results.passes.find((r) => r.id === "color-contrast")?.nodes.length ?? 0;
+  expect(contrastChecked).toBeGreaterThan(150);
 }
 
 test("home renders server-side content", async ({ page }) => {

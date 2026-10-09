@@ -1,16 +1,24 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { SkipLink } from "@/components/ui/skip-link";
+import { homeContent } from "@/content/en";
 import { siteUrl } from "@/lib/site-url";
 import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
-const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
-const geistMono = Geist_Mono({
+const geist = localFont({
+  src: "../fonts/geist-400-500-latin.woff2",
+  weight: "400 500",
+  variable: "--font-geist",
+  display: "swap",
+});
+const geistMono = localFont({
+  src: "../fonts/geist-mono-400-latin.woff2",
+  weight: "400",
   variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
   preload: false,
 });
 const bricolage = localFont({
@@ -39,8 +47,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="flex min-h-dvh flex-col">
         <SkipLink />
-        <SiteHeader />
+        <SiteHeader site={homeContent.site} nav={homeContent.nav} />
         {children}
+        <SiteFooter
+          footer={homeContent.footer}
+          newTabLabel={homeContent.newTab}
+        />
       </body>
     </html>
   );

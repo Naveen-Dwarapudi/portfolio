@@ -11,7 +11,7 @@ Node 24 (`.nvmrc`). Run `npm run build` before E2E or Lighthouse, since both ser
 - `npm run typecheck`: runs `next typegen` then `tsc --noEmit`. Plain `tsc` fails on a clean checkout because `LayoutProps` and other route types are generated.
 - `npm run test`: Vitest, single run. Single file: `npx vitest run src/lib/site-url.test.ts`. Single test: add `-t "<name>"`.
 - `npm run test:e2e`: Playwright on port 3100. Single spec: `npx playwright test e2e/smoke.spec.ts`.
-- `npm run lhci`: Lighthouse CI budgets (`lighthouserc.json`). Locally on macOS without Chrome, set `CHROME_PATH` to Playwright's Chromium.
+- `npm run lhci`: Lighthouse CI budgets (`lighthouserc.json`) via `scripts/lhci.mjs`, which first benchmarks the host CPU and calibrates `cpuSlowdownMultiplier` so every machine simulates the same phone the budgets were set on (`scripts/lhci-calibration.mjs`, reference benchmarkIndex 4480). Never change the reference or the budgets to make CI pass. Locally on macOS without Chrome, set `CHROME_PATH` to Playwright's Chromium.
 
 CI (`.github/workflows/ci.yml`) runs `verify`, then `e2e` and `lighthouse` in parallel, on every PR and on pushes to `main`.
 
@@ -29,7 +29,11 @@ This Next version differs from older training data. Read the bundled docs in `no
 - Theme: `src/lib/theme.ts` plus the inline script in `layout.tsx`; the toggle is `src/components/theme/theme-toggle.tsx`.
 - Motion: CSS first (`.fade-up`, `.line-reveal-line`, `.scroll-reveal`). Client effects are in `src/components/motion/`. Every effect must honour reduced motion and must not hide content when JS fails.
 - JS budget: don't use `next/link` or the `<Image>` component (use `<a>` and `getImageProps()`), and don't add Motion, `next-themes` or similar without measuring with LHCI.
-- Display font is a local subset: regenerate it per `src/fonts/README.md`, never swap in the full Google font.
+- Fonts are local subsets (Bricolage 800, Geist 400–500, Geist Mono 400): regenerate per `src/fonts/README.md`, never swap in the full Google fonts. New weights or glyphs mean regenerating.
+- Page copy lives in `src/content/en.ts` (typed by `src/content/types.ts`); components never hard-code user-visible text.
+- Images: `Screenshot` (lazy) or `Portrait` (eager) via `getImageProps`; AVIF is enabled. Mind bytes fetched before LCP, since Chrome may fetch lazy images early.
+- External links: `newTabLabel={homeContent.newTab}` on `ButtonLink`/`TextLink`; if the visible text is generic ("Live site"), add an explicit `aria-label`.
+- Cache Components: no `new Date()` / `Math.random()` in render; use `"use cache"` (see `CopyrightYear`).
 - jsdom test helpers: `mockMatchMedia([...queries])` from `@/test/setup`; storage and `data-theme` reset after each test.
 
 ## What this is
@@ -64,7 +68,7 @@ Resolve version numbers against the registry at implementation time. They are no
 - **Accessibility:** WCAG 2.1 AA, with axe checks on every route in **both** themes. On first visit the theme follows the visitor's OS setting (dark if none), and a toggle choice is remembered. Both themes must be equally contrast-verified.
 - **Design:** one accent colour only, burnt orange (`#FF8A3D` dark / `#B4470F` light), on a cool near-black base. Headings use Bricolage Grotesque, body Geist, labels Geist Mono. See `docs/superpowers/specs/2026-10-09-design-system-design.md`. Monospace is confined to structural metadata (section numbers, dates, stack chips).
 - Hindi and Telugu copy are machine-assisted drafts, and the owner must review them before a locale ships.
-- **Open item:** the "5 production applications" headline metric needs an owner decision before phase 3 (spec §4).
+- Headline metric is "5 client engagements" (resolved in parent spec §4), not "5 production applications".
 
 ## Build order
 
