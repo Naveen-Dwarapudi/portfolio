@@ -230,8 +230,12 @@ recruiter. So:
 - Detail stays at or below the resume's specificity: no architecture detail not
   inferable from the public product, and no metric that cannot be defended in an
   interview.
-- The same rule applies to this public repository: code, content, docs, commit
-  messages and the downloadable resume.
+- The same rule applies to this public repository: code, content, docs and
+  commit messages.
+- **Exception: the resume PDF.** The owner shares the resume (which names
+  clients) with recruiters, so it stays downloadable from `/resume`. The PDF is
+  served with `X-Robots-Tag: noindex` (phase 8) so it doesn't surface client names
+  in search results. The site's own pages never repeat the names.
 
 Every engagement is presented as a written case study with purpose-built
 diagrams.
