@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { mockMatchMedia } from "@/test/setup";
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeToggle, wipeOrigin } from "./theme-toggle";
 
 describe("ThemeToggle", () => {
   it("offers light when the effective theme is dark (no OS preference)", () => {
@@ -41,5 +41,23 @@ describe("ThemeToggle", () => {
       screen.getByRole("button", { name: "Switch to light theme" }),
     );
     expect(document.documentElement.getAttribute("data-theme")).toBe("light");
+  });
+});
+
+describe("wipeOrigin", () => {
+  const rect = DOMRect.fromRect({ x: 100, y: 20, width: 40, height: 40 });
+
+  it("starts from the pointer for mouse clicks", () => {
+    expect(wipeOrigin({ clientX: 110, clientY: 30, detail: 1 }, rect)).toEqual({
+      x: 110,
+      y: 30,
+    });
+  });
+
+  it("starts from the button centre for keyboard activation", () => {
+    expect(wipeOrigin({ clientX: 0, clientY: 0, detail: 0 }, rect)).toEqual({
+      x: 120,
+      y: 40,
+    });
   });
 });

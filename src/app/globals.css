@@ -189,6 +189,14 @@ body::after {
   }
 }
 
+/* Theme wipe: drop the browser's default cross-fade so only the clip-path
+   circle (theme-toggle.tsx) is visible. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

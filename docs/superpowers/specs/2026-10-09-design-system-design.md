@@ -283,3 +283,7 @@ nav and labels. The "ND." monogram stays as the logo.
 | Name display | full name where space allows, "Naveen Dwarapudi" where tight | owner rule |
 | Theme engine | hand-rolled | no dependency, minimal JS, no Next 16 compatibility risk |
 | Scroll reveals | CSS `view()` timeline | zero JS; never gates content |
+| Links | plain `<a>`, no `next/link` | saves ~8 KB of client JS; cross-document View Transitions planned for page changes |
+| Images | `getImageProps()` + `<img>`, `loading="eager"` + `fetchPriority="high"` | server-only, ~3 KB less JS; `priority` is deprecated in Next 16 |
+| Display font | Bricolage Grotesque 800, local Latin subset (~17 KB) | the full variable font (41 KB) cost ~150 ms of LCP |
+| Split-text accessibility | sr-only full text + aria-hidden animated lines | screen readers read the full name with proper spaces |

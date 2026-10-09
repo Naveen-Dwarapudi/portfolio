@@ -5,7 +5,6 @@ export function SiteHeader() {
   return (
     <header className="relative z-10">
       <Container className="flex items-center justify-between py-5">
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- removed in Task 7 */}
         <a
           href="/"
           aria-label="Naveen Dwarapudi, home"

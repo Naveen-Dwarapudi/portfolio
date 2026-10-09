@@ -25,6 +25,12 @@ This Next version differs from older training data. Read the bundled docs in `no
 - Canonical origin: import `siteUrl` from `@/lib/site-url`. Never read `NEXT_PUBLIC_SITE_URL` directly.
 - Content source of truth: `src/resume/Naveen Dwarapudi Resume.pdf`. Headshots and screenshots are in `src/images/` (`mypic-2.jpeg` is the hero, `mypic-1.jpeg` is the about section).
 - Design source of truth: `docs/superpowers/specs/`. Phase plans: `docs/superpowers/plans/`.
+- Design tokens live in `src/app/globals.css` (dark base; light via `prefers-color-scheme` or `[data-theme="light"]`). Use the Tailwind names (`bg-bg`, `text-muted`, `text-accent`, `border-line`, `font-display`, `text-display`), never raw hex.
+- Theme: `src/lib/theme.ts` plus the inline script in `layout.tsx`; the toggle is `src/components/theme/theme-toggle.tsx`.
+- Motion: CSS first (`.fade-up`, `.line-reveal-line`, `.scroll-reveal`). Client effects are in `src/components/motion/`. Every effect must honour reduced motion and must not hide content when JS fails.
+- JS budget: don't use `next/link` or the `<Image>` component (use `<a>` and `getImageProps()`), and don't add Motion, `next-themes` or similar without measuring with LHCI.
+- Display font is a local subset: regenerate it per `src/fonts/README.md`, never swap in the full Google font.
+- jsdom test helpers: `mockMatchMedia([...queries])` from `@/test/setup`; storage and `data-theme` reset after each test.
 
 ## What this is
 

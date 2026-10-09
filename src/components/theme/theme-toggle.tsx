@@ -48,6 +48,20 @@ function applyTheme(theme: Theme) {
   listeners.forEach((l) => l());
 }
 
+/**
+ * Where the circular wipe starts: the pointer for mouse clicks, the button's
+ * centre for keyboard activation (detail === 0 reports clientX/Y as 0,0).
+ */
+export function wipeOrigin(
+  event: { clientX: number; clientY: number; detail: number },
+  rect: DOMRect,
+): { x: number; y: number } {
+  if (event.detail === 0) {
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+  }
+  return { x: event.clientX, y: event.clientY };
+}
+
 export function ThemeToggle() {
   // Server snapshot is null: the label renders after hydration to avoid a mismatch.
   const theme = useSyncExternalStore(subscribe, currentTheme, () => null);
@@ -62,7 +76,10 @@ export function ThemeToggle() {
       applyTheme(next);
       return;
     }
-    const { clientX: x, clientY: y } = event;
+    const { x, y } = wipeOrigin(
+      event,
+      event.currentTarget.getBoundingClientRect(),
+    );
     const radius = Math.hypot(
       Math.max(x, window.innerWidth - x),
       Math.max(y, window.innerHeight - y),
@@ -83,7 +100,9 @@ export function ThemeToggle() {
             pseudoElement: "::view-transition-new(root)",
           },
         );
-      });
+      })
+      // A second click before this one is ready skips it; that's expected.
+      .catch(() => {});
   }
 
   return (

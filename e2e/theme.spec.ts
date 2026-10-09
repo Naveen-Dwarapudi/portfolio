@@ -57,3 +57,35 @@ test("the toggle label follows a live OS change when nothing is stored", async (
     page.getByRole("button", { name: "Switch to dark theme" }),
   ).toBeVisible();
 });
+
+test("the theme wipe is a clean circle, not a cross-fade", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/");
+  const crossFades = await page.evaluate(async () => {
+    document.querySelector<HTMLButtonElement>("header button")?.click();
+    await new Promise((r) =>
+      requestAnimationFrame(() => requestAnimationFrame(r)),
+    );
+    return document
+      .getAnimations()
+      .filter(
+        (a) =>
+          (a.effect as KeyframeEffect | null)?.pseudoElement ===
+          "::view-transition-old(root)",
+      ).length;
+  });
+  expect(crossFades).toBe(0);
+});
+
+test("rapid double toggling raises no page errors", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await page.goto("/");
+  await page.evaluate(() => {
+    const b = document.querySelector<HTMLButtonElement>("header button");
+    b?.click();
+    b?.click();
+  });
+  await page.waitForTimeout(1000);
+  expect(errors).toEqual([]);
+});
