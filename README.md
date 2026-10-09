@@ -26,3 +26,9 @@ Requires Node 24 (`nvm use`).
 | `npm run build && npm run lhci`     | Lighthouse CI performance budget   |
 
 Design: [docs/superpowers/specs/2026-09-19-nextjs-portfolio-design.md](docs/superpowers/specs/2026-09-19-nextjs-portfolio-design.md)
+
+## License
+
+© 2026 Bhavani Sankar Naveen Dwarapudi. All rights reserved. The code is public
+to read, but not licensed for reuse; see [LICENSE](LICENSE). Bundled fonts and
+dependencies keep their own licences.

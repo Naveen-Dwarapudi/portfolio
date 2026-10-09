@@ -1,0 +1,19 @@
+Copyright (c) 2026 Bhavani Sankar Naveen Dwarapudi. All rights reserved.
+
+This repository is public so that its code can be read. Publishing it grants no
+licence to copy, modify, distribute or reuse any part of it.
+
+That includes the source code, the written content (text and case studies),
+the photographs and other images, the resume, and the site's design. Except as
+GitHub's Terms of Service allow (viewing and forking on GitHub), you may not
+use any of it without prior written permission from the copyright holder.
+
+For permission requests, contact dbsnaveen@gmail.com.
+
+Third-party components keep their own licences and are not covered by this
+notice:
+
+- Fonts in src/fonts/ (Bricolage Grotesque, Geist, Geist Mono) are licensed
+  under the SIL Open Font License 1.1; see src/fonts/OFL-*.txt.
+- npm dependencies (Next.js, React and others) are licensed under their own
+  terms; see each package in node_modules/.
