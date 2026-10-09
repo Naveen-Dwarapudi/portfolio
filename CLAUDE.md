@@ -52,7 +52,8 @@ Resolve version numbers against the registry at implementation time. They are no
 
 - **Confidentiality:** no client screenshots. Case-study detail stays at or below the resume's specificity: no internal system names beyond XCEED, WoW, and AMS, and no metric the owner can't defend in an interview. Only the self-owned Support Ticket System may show real screenshots.
 - **Motion:** it explains, never decorates. `prefers-reduced-motion` is honored everywhere. Content is server-rendered and never gated behind animation.
-- **Performance budget (CI-enforced in `lighthouserc.json`):** Lighthouse ≥ 95 in all four categories on mobile, CLS < 0.02, LCP ≤ 2500 ms, script transfer ≤ 150 KiB. The spec's targets were LCP < 1.5 s and JS ≈ 120 KB, but under Lighthouse's simulated mobile throttling the empty Next.js baseline already measures about 2170 ms and 134 KiB. **Open item:** the owner should amend spec §7. Never raise a budget to make CI pass; lazy-load instead.
+- **Performance budget (CI-enforced in `lighthouserc.json`):** Lighthouse ≥ 95 in all four categories on mobile, CLS < 0.02, LCP ≤ 2500 ms, script transfer ≤ 150 KiB. These replace the original LCP < 1.5 s / JS ≈ 120 KB targets (spec §7, amended), because the empty Next.js baseline already measures about 2170 ms and 134 KiB. Never raise a budget to make CI pass; lazy-load instead.
+- **Zero cost:** everything must run on free tiers (Vercel Hobby, GitHub Actions on the public repo, the Resend free tier, Cloudflare Turnstile). Flag anything paid and offer a free alternative.
 - **Accessibility:** WCAG 2.1 AA, with axe checks on every route in **both** themes. Dark is the default, and light mode must be equally contrast-verified.
 - **Design:** one accent colour only (amber/copper) on a cool near-black base. Monospace is confined to structural metadata (section numbers, dates, stack chips).
 - Hindi and Telugu copy are machine-assisted drafts, and the owner must review them before a locale ships.
