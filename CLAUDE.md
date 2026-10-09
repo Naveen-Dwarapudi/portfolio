@@ -64,7 +64,7 @@ Resolve version numbers against the registry at implementation time. They are no
 - **Accessibility:** WCAG 2.1 AA, with axe checks on every route in **both** themes. On first visit the theme follows the visitor's OS setting (dark if none), and a toggle choice is remembered. Both themes must be equally contrast-verified.
 - **Design:** one accent colour only, burnt orange (`#FF8A3D` dark / `#B4470F` light), on a cool near-black base. Headings use Bricolage Grotesque, body Geist, labels Geist Mono. See `docs/superpowers/specs/2026-10-09-design-system-design.md`. Monospace is confined to structural metadata (section numbers, dates, stack chips).
 - Hindi and Telugu copy are machine-assisted drafts, and the owner must review them before a locale ships.
-- **Open item:** the "5 production applications" headline metric needs an owner decision before phase 3 (spec §4).
+- Headline metric is "5 client engagements" (resolved in parent spec §4), not "5 production applications".
 
 ## Build order
 
