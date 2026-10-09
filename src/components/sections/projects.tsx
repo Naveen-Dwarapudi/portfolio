@@ -1,31 +1,24 @@
-import momTribute from "@/images/mom-tribute.png";
-import paymentsPortal from "@/images/payments-portal-app.png";
-import supportTicket from "@/images/support-ticket-management-system.png";
-import type { StaticImageData } from "next/image";
 import { InteractiveCard } from "@/components/motion/pointer-effects";
 import { BrowserFrame } from "@/components/ui/browser-frame";
 import { ButtonLink } from "@/components/ui/button";
 import { Chip } from "@/components/ui/chip";
 import { Heading } from "@/components/ui/heading";
 import { Screenshot } from "@/components/ui/screenshot";
+import { screenshots } from "@/components/ui/screenshots";
 import { Section } from "@/components/ui/section";
 import { TextLink } from "@/components/ui/text-link";
-import type { HomeContent, ScreenshotKey } from "@/content/types";
-
-const screenshots: Record<ScreenshotKey, StaticImageData> = {
-  "support-ticket": supportTicket,
-  "payments-portal": paymentsPortal,
-  "mom-tribute": momTribute,
-};
+import type { HomeContent } from "@/content/types";
 
 export function Projects({
   projects,
   newTabLabel,
   techStackLabel,
+  readCaseStudyLabel,
 }: {
   projects: HomeContent["projects"];
   newTabLabel: string;
   techStackLabel: string;
+  readCaseStudyLabel: string;
 }) {
   const p = projects.independent;
   return (
@@ -65,7 +58,7 @@ export function Projects({
                   </li>
                 ))}
               </ul>
-              <div className="mt-6">
+              <div className="mt-6 flex flex-wrap items-center gap-4">
                 <ButtonLink
                   href={p.liveUrl}
                   arrow="↗"
@@ -74,6 +67,14 @@ export function Projects({
                 >
                   {projects.liveSite}
                 </ButtonLink>
+                <TextLink
+                  href={`/work/${p.slug}`}
+                  aria-label={`${readCaseStudyLabel}: ${p.title}`}
+                  className="text-sm"
+                >
+                  {readCaseStudyLabel}
+                  <span aria-hidden="true"> →</span>
+                </TextLink>
               </div>
             </div>
           </div>
