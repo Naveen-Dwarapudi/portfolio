@@ -38,4 +38,16 @@ describe("resolveSiteUrl", () => {
       /NEXT_PUBLIC_SITE_URL/,
     );
   });
+
+  it("throws when unset in a Vercel production build", () => {
+    expect(() => resolveSiteUrl(undefined, "production")).toThrow(
+      /NEXT_PUBLIC_SITE_URL/,
+    );
+  });
+
+  it("falls back to localhost when unset in a Vercel preview", () => {
+    expect(resolveSiteUrl(undefined, "preview").href).toBe(
+      `${SITE_URL_FALLBACK}/`,
+    );
+  });
 });

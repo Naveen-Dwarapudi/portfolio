@@ -1,8 +1,18 @@
 export const SITE_URL_FALLBACK = "http://localhost:3000";
 
-export function resolveSiteUrl(raw: string | undefined): URL {
+export function resolveSiteUrl(
+  raw: string | undefined,
+  vercelEnv?: string,
+): URL {
   const value = raw?.trim();
-  if (!value) return new URL(SITE_URL_FALLBACK);
+  if (!value) {
+    if (vercelEnv === "production") {
+      throw new Error(
+        "NEXT_PUBLIC_SITE_URL must be set for Vercel production builds.",
+      );
+    }
+    return new URL(SITE_URL_FALLBACK);
+  }
 
   const withProtocol = /^https?:\/\//i.test(value) ? value : `https://${value}`;
   try {
@@ -14,4 +24,7 @@ export function resolveSiteUrl(raw: string | undefined): URL {
   }
 }
 
-export const siteUrl = resolveSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
+export const siteUrl = resolveSiteUrl(
+  process.env.NEXT_PUBLIC_SITE_URL,
+  process.env.VERCEL_ENV,
+);
