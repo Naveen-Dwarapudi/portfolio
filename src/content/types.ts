@@ -14,6 +14,8 @@ export type NavItem = { label: string; href: `/#${string}` };
 export type Metric = { value: number; suffix?: string; label: string };
 
 export type Engagement = {
+  /** Case study at /work/{slug}. */
+  slug: string;
   kicker: string;
   title: string;
   summary: string;
@@ -24,6 +26,8 @@ export type Engagement = {
 export type SkillGroup = { name: string; items: string[]; accent?: boolean };
 
 export type Project = {
+  /** Case study at /work/{slug}. */
+  slug: string;
   title: string;
   subtitle: string;
   points: string[];
@@ -110,4 +114,49 @@ export type HomeContent = {
   };
   newTab: string;
   techStack: string;
+  readCaseStudy: string;
+};
+
+export type CaseStudy = {
+  slug: string;
+  kicker: string;
+  title: string;
+  /** One line; also the page's meta description. */
+  summary: string;
+  facts: { role: string; platform: "Web" | "Mobile" | "Web & API" };
+  context: string;
+  role: string;
+  problem: string;
+  /** 3–5 steps. */
+  approach: string[];
+  /** 2–4 decisions, each with its trade-off. */
+  decisions: { decision: string; tradeoff: string }[];
+  /** Resume-backed outcomes only. */
+  impact: string[];
+  stack: string[];
+  /** Self-owned projects only: live site and real screenshot. */
+  live?: { url: ExternalUrl; image: ScreenshotKey; imageAlt: string };
+};
+
+/** Labels for the case-study template. */
+export type CaseStudyUi = {
+  sections: {
+    context: string;
+    role: string;
+    problem: string;
+    approach: string;
+    decisions: string;
+    impact: string;
+    stack: string;
+  };
+  roleLabel: string;
+  platformLabel: string;
+  decisionLabel: string;
+  tradeoffLabel: string;
+  liveSite: string;
+  previous: string;
+  next: string;
+  backToWork: string;
+  pagerLabel: string;
+  titleSuffix: string;
 };

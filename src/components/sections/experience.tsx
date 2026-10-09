@@ -2,14 +2,17 @@ import { InteractiveCard } from "@/components/motion/pointer-effects";
 import { Chip } from "@/components/ui/chip";
 import { Heading } from "@/components/ui/heading";
 import { Section } from "@/components/ui/section";
+import { TextLink } from "@/components/ui/text-link";
 import type { HomeContent } from "@/content/types";
 
 export function Experience({
   experience,
   techStackLabel,
+  readCaseStudyLabel,
 }: {
   experience: HomeContent["experience"];
   techStackLabel: string;
+  readCaseStudyLabel: string;
 }) {
   return (
     <Section id="experience" index="03" label={experience.label}>
@@ -73,6 +76,14 @@ export function Experience({
                   </li>
                 ))}
               </ul>
+              <TextLink
+                href={`/work/${e.slug}`}
+                aria-label={`${readCaseStudyLabel}: ${e.title}`}
+                className="mt-5 inline-block text-sm"
+              >
+                {readCaseStudyLabel}
+                <span aria-hidden="true"> →</span>
+              </TextLink>
             </InteractiveCard>
           </li>
         ))}

@@ -1,4 +1,4 @@
-import type { HomeContent } from "./types";
+import type { HomeContent } from "../types";
 
 /**
  * English home-page copy. Source of truth for every claim: the resume
@@ -52,6 +52,7 @@ export const homeContent: HomeContent = {
     engagements: [
       {
         kicker: "Pharma · Enterprise web",
+        slug: "pharma-enterprise-portals",
         title: "Pharmaceutical B2B ordering platform",
         summary:
           "Rebuilt three enterprise portals (admin, internal staff and customer) on a new stack to modernise B2B ordering for a distributor network.",
@@ -74,6 +75,7 @@ export const homeContent: HomeContent = {
       },
       {
         kicker: "Fintech · Municipal payments",
+        slug: "municipal-bill-payment",
         title: "Municipal bill payment platform",
         summary:
           "Built two responsive single-page apps, admin and citizen, giving municipal staff and residents one place to manage and pay bills online.",
@@ -95,6 +97,7 @@ export const homeContent: HomeContent = {
       },
       {
         kicker: "Enterprise · Internal tools",
+        slug: "workflow-portal",
         title: "Workflow management portal",
         summary:
           "Owned an internal workflow portal end to end, from project setup to production deployment.",
@@ -115,6 +118,7 @@ export const homeContent: HomeContent = {
       },
       {
         kicker: "Logistics · Mobile",
+        slug: "warehouse-mobile-migration",
         title: "Warehouse operations apps",
         summary:
           "Led the migration of a global e-commerce company's internal warehouse apps from Ionic to React Native, shipping native-performance Android and iOS builds.",
@@ -134,6 +138,7 @@ export const homeContent: HomeContent = {
       },
       {
         kicker: "Healthcare · Mobile",
+        slug: "healthcare-ecommerce-app",
         title: "Healthcare e-commerce app",
         summary:
           "Built the cross-platform mobile UI for product discovery and ordering, from browse through checkout.",
@@ -211,8 +216,8 @@ export const homeContent: HomeContent = {
       {
         name: "AI-Assisted Development",
         items: [
-          "GitHub Copilot",
           "Claude",
+          "GitHub Copilot",
           "Component generation & code review",
           "30%+ measured build-time reduction",
         ],
@@ -225,6 +230,7 @@ export const homeContent: HomeContent = {
     heading: "Built on my own time.",
     independentLabel: "Independent project",
     independent: {
+      slug: "support-ticket-system",
       title: "Support Ticket Management System",
       subtitle: "Full-stack MERN application",
       points: [
@@ -339,4 +345,5 @@ export const homeContent: HomeContent = {
   },
   newTab: "(opens in a new tab)",
   techStack: "Tech stack",
+  readCaseStudy: "Read case study",
 };

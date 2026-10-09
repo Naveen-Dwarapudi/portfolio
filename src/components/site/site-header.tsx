@@ -12,12 +12,13 @@ export function SiteHeader({
   return (
     <header className="relative z-10">
       <Container className="flex items-center justify-between py-5">
+        {/* Visible "ND." stays in the accessible name (WCAG 2.5.3). */}
         <a
           href="/"
-          aria-label={site.homeLabel}
           className="font-display text-xl font-extrabold tracking-[-0.04em]"
         >
           ND<span className="text-accent">.</span>
+          <span className="sr-only"> {site.homeLabel}</span>
         </a>
         <div className="flex items-center gap-6">
           <nav aria-label={site.navLabel} className="hidden md:block">

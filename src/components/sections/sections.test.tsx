@@ -39,7 +39,11 @@ describe("About", () => {
 describe("Experience", () => {
   it("lists the role and all five engagements as an ordered list", () => {
     render(
-      <Experience experience={c.experience} techStackLabel={c.techStack} />,
+      <Experience
+        experience={c.experience}
+        techStackLabel={c.techStack}
+        readCaseStudyLabel={c.readCaseStudy}
+      />,
     );
     expect(
       screen.getByText(c.experience.company, { exact: false }),
@@ -50,16 +54,28 @@ describe("Experience", () => {
     expect(titles).toEqual(c.experience.engagements.map((e) => e.title));
   });
 
-  it("contains no links until case studies exist", () => {
+  it("links each engagement to its case study", () => {
     render(
-      <Experience experience={c.experience} techStackLabel={c.techStack} />,
+      <Experience
+        experience={c.experience}
+        techStackLabel={c.techStack}
+        readCaseStudyLabel={c.readCaseStudy}
+      />,
     );
-    expect(screen.queryAllByRole("link")).toEqual([]);
+    for (const e of c.experience.engagements) {
+      expect(
+        screen.getByRole("link", { name: `${c.readCaseStudy}: ${e.title}` }),
+      ).toHaveAttribute("href", `/work/${e.slug}`);
+    }
   });
 
   it("states that client names are withheld", () => {
     render(
-      <Experience experience={c.experience} techStackLabel={c.techStack} />,
+      <Experience
+        experience={c.experience}
+        techStackLabel={c.techStack}
+        readCaseStudyLabel={c.readCaseStudy}
+      />,
     );
     expect(
       screen.getByText(/names withheld under confidentiality/i),
@@ -82,6 +98,7 @@ describe("Projects", () => {
         projects={c.projects}
         newTabLabel={c.newTab}
         techStackLabel={c.techStack}
+        readCaseStudyLabel={c.readCaseStudy}
       />,
     );
     const live = screen.getByRole("link", {
@@ -103,6 +120,7 @@ describe("Projects", () => {
         projects={c.projects}
         newTabLabel={c.newTab}
         techStackLabel={c.techStack}
+        readCaseStudyLabel={c.readCaseStudy}
       />,
     );
     expect(screen.getAllByText(c.projects.sideBadge)).toHaveLength(
@@ -125,6 +143,7 @@ describe("Projects headings", () => {
         projects={c.projects}
         newTabLabel={c.newTab}
         techStackLabel={c.techStack}
+        readCaseStudyLabel={c.readCaseStudy}
       />,
     );
     expect(

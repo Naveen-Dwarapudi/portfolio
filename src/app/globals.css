@@ -271,10 +271,19 @@ body::after {
   }
 }
 
+/* Page-to-page navigation (e.g. home → case study): browser cross-fade,
+   zero JS. Unsupported browsers navigate normally. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
 /* Theme wipe: drop the browser's default cross-fade so only the clip-path
-   circle (theme-toggle.tsx) is visible. */
-::view-transition-old(root),
-::view-transition-new(root) {
+   circle is visible. Scoped to .theme-wipe (set by theme-toggle.tsx while the
+   wipe runs) so page-to-page navigation keeps its cross-fade. */
+html.theme-wipe::view-transition-old(root),
+html.theme-wipe::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
 }

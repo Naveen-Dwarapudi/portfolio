@@ -30,10 +30,13 @@ This Next version differs from older training data. Read the bundled docs in `no
 - Motion: CSS first (`.fade-up`, `.line-reveal-line`, `.scroll-reveal`). Client effects are in `src/components/motion/`. Every effect must honour reduced motion and must not hide content when JS fails.
 - JS budget: don't use `next/link` or the `<Image>` component (use `<a>` and `getImageProps()`), and don't add Motion, `next-themes` or similar without measuring with LHCI.
 - Fonts are local subsets (Bricolage 800, Geist 400–500, Geist Mono 400): regenerate per `src/fonts/README.md`, never swap in the full Google fonts. New weights or glyphs mean regenerating.
-- Page copy lives in `src/content/en.ts` (typed by `src/content/types.ts`); components never hard-code user-visible text.
+- Page copy lives in `src/content/en/` (`home.ts`, `case-studies.ts`, re-exported by `index.ts`; typed by `src/content/types.ts`); components never hard-code user-visible text.
 - Images: `Screenshot` (lazy) or `Portrait` (eager) via `getImageProps`; AVIF is enabled. Mind bytes fetched before LCP, since Chrome may fetch lazy images early.
 - External links: `newTabLabel={homeContent.newTab}` on `ButtonLink`/`TextLink`; if the visible text is generic ("Live site"), add an explicit `aria-label`.
 - Cache Components: no `new Date()` / `Math.random()` in render; use `"use cache"` (see `CopyrightYear`).
+- Case studies: typed data in `src/content/en/case-studies.ts` (`CaseStudy`), one template (`src/components/case-study/`), route `src/app/work/[slug]`. `src/proxy.ts` returns real 404s for unknown slugs (Cache Components forbids `dynamicParams = false`); keep its slug set in sync by importing `caseStudies`, never a hard-coded list.
+- Don't put scroll-linked reveals on reading content that can be on screen at load: it stays partly transparent until the reader scrolls.
+- Links with visible text keep that text in their accessible name (WCAG 2.5.3): add context with sr-only text, or start `aria-label` with the visible text.
 - jsdom test helpers: `mockMatchMedia([...queries])` from `@/test/setup`; storage and `data-theme` reset after each test.
 
 ## What this is

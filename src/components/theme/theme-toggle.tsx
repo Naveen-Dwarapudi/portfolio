@@ -84,9 +84,16 @@ export function ThemeToggle() {
       Math.max(x, window.innerWidth - x),
       Math.max(y, window.innerHeight - y),
     );
-    document
-      .startViewTransition(() => applyTheme(next))
-      .ready.then(() => {
+    // Scopes the "no default cross-fade" CSS to this wipe only, so page-to-page
+    // navigation keeps the browser's cross-fade (globals.css).
+    const root = document.documentElement;
+    root.classList.add("theme-wipe");
+    const transition = document.startViewTransition(() => applyTheme(next));
+    transition.finished
+      .finally(() => root.classList.remove("theme-wipe"))
+      .catch(() => {});
+    transition.ready
+      .then(() => {
         document.documentElement.animate(
           {
             clipPath: [

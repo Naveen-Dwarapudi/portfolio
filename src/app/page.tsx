@@ -12,12 +12,17 @@ export default function Home() {
     <main id="main" className="flex-1">
       <Hero hero={c.hero} metrics={c.metrics} />
       <About about={c.about} />
-      <Experience experience={c.experience} techStackLabel={c.techStack} />
+      <Experience
+        experience={c.experience}
+        techStackLabel={c.techStack}
+        readCaseStudyLabel={c.readCaseStudy}
+      />
       <Skills skills={c.skills} />
       <Projects
         projects={c.projects}
         newTabLabel={c.newTab}
         techStackLabel={c.techStack}
+        readCaseStudyLabel={c.readCaseStudy}
       />
       <Credentials credentials={c.credentials} />
       <Contact contact={c.contact} newTabLabel={c.newTab} />
