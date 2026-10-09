@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import { SiteHeader } from "@/components/site/site-header";
+import { SkipLink } from "@/components/ui/skip-link";
 import { siteUrl } from "@/lib/site-url";
 import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
@@ -35,7 +37,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="flex min-h-dvh flex-col">{children}</body>
+      <body className="flex min-h-dvh flex-col">
+        <SkipLink />
+        <SiteHeader />
+        {children}
+      </body>
     </html>
   );
 }
