@@ -47,7 +47,7 @@ that gap.
 |---|---|
 | Repository | `github.com/Naveen-Dwarapudi/portfolio` |
 | Visibility | **Public** |
-| Local path | `~/Desktop/Workspace/portfolio` |
+| Local path | `~/Workspace/portfolio` |
 | Default branch | `main` (production) |
 | Host | **Vercel**, preview deployment per pull request |
 | Domain | `*.vercel.app` initially; custom domain attachable later with no code change |
