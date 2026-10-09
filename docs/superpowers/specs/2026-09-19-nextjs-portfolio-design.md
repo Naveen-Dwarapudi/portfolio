@@ -14,9 +14,10 @@ individual-contributor and product-engineering roles**.
 
 The existing site (`Naveen-Dwarapudi_Portfolio`, vanilla HTML/CSS/JS on the
 Bedimcode template) fails at this for one overriding reason: **it contains no
-professional experience section at all.** Four client engagements at Aziro
-Technologies — Dr. Reddy's XCEED, Nuvei Bill Pay, Internal Capability Hub, and
-the Amazon warehouse app migration — plus Emami Frankross appear nowhere on it.
+professional experience section at all.** None of the five client engagements
+at Aziro Technologies (pharma enterprise portals, municipal bill payment, an
+internal workflow portal, a warehouse mobile-app migration, and a healthcare
+e-commerce app) appears on it.
 A visitor sees three hobby projects and a 400-word block of emoji bullets.
 
 The resume is substantially stronger than the portfolio. This project closes
@@ -111,7 +112,7 @@ needed) and the template CSS.
 | Language | TypeScript, `strict: true` | |
 | Styling | **Tailwind CSS v4** (CSS-first `@theme`) | Current generation; design tokens live in CSS, no `tailwind.config.js` indirection. |
 | Animation | **Motion** (`motion`, formerly Framer Motion) | Standard for React animation; layout animations, scroll-linked effects, view transitions. |
-| i18n | **next-intl** | JSON message catalogs mirror the configuration-driven multilingual layer shipped at Dr. Reddy's. |
+| i18n | **next-intl** | JSON message catalogs mirror the configuration-driven multilingual layer shipped in client work. |
 | Command palette | **cmdk** | Small, accessible, well-established primitive. |
 | Forms | Server Action + **Zod** + react-hook-form | Server-side validation; no third-party form-service branding. |
 | Email delivery | **Resend** | Replaces the current `formsubmit.co` endpoint. |
@@ -148,11 +149,11 @@ Home is a single scrolling narrative. Each engagement gets a dedicated route.
                                  -> Independent project -> Side projects
                                  -> Certifications & Education -> Contact
 
-/work/xceed-api                  Dr. Reddy's — three enterprise portals, RBAC
-/work/nuvei-bill-pay             Municipal bill payment — Admin + Citizen
-/work/ich-portal                 Workflow portal — Google OAuth, built from zero
-/work/amazon-warehouse-apps      Ionic -> React Native migration
-/work/emami-frankross            Healthcare e-commerce mobile
+/work/pharma-enterprise-portals  Pharma — three enterprise portals, RBAC
+/work/municipal-bill-payment     Payments — Admin + Citizen SPAs
+/work/workflow-portal            Internal workflow portal — Google OAuth, built from zero
+/work/warehouse-mobile-migration Logistics — Ionic -> React Native migration
+/work/healthcare-ecommerce-app   Healthcare e-commerce mobile app
 /work/support-ticket-system      Independent MERN application
 
 /resume                          Embedded viewer + download
@@ -168,18 +169,12 @@ Developer | Full-Stack (MERN) Engineer"), one-sentence summary, two CTAs
 No WebGL.
 
 **Impact metrics.** Four figures, count-up on first view:
-`4+ years` · `5 production applications` · `30%+ component build-time reduction`
+`4+ years` · `5 client engagements` · `30%+ component build-time reduction`
 · `4 industries`
 
-**Open item — the application count needs the owner's decision.** The resume's
-Key Achievements state "5 production applications (3 enterprise web portals,
-2 cross-platform mobile apps)", but the experience section describes five
-*engagements* spanning more deliverables than that: XCEED (three portals), Nuvei
-(two SPAs), ICH (one portal), Amazon (WoW and AMS), Emami (one app). Displayed
-prominently as a headline metric, this invites a question the owner must be able
-to answer crisply. Either the count is revised upward, or the label is changed to
-something unambiguous such as `5 client engagements`. Resolve before phase 3, and
-align the resume to match.
+*Resolved 2026-10-09.* The resume's "5 production applications" undercounts the
+deliverables, since the five engagements together shipped more apps and portals
+than that. The site therefore uses the unambiguous label `5 client engagements`.
 
 **About.** Rewritten to approximately 120 words of prose. The current ~400-word
 emoji-bulleted block is replaced; its content migrates to the skills matrix,
@@ -202,7 +197,7 @@ Render backend.
 
 **Side projects.** Payments Portal and Mom Tribute, in a compact strip, honestly
 labelled as practice projects. On the current site these carry the same visual
-weight as the Amazon engagement, which inverts the actual story.
+weight as the client engagements, which inverts the actual story.
 
 **Certifications & Education.** Six certifications plus B.Tech ECE (2019),
 Ramachandra College of Engineering.
@@ -222,18 +217,24 @@ dropped.
 
 ### Confidentiality position
 
-**No client screenshots.** Every engagement is presented as a written case study
-with purpose-built diagrams.
+*Amended 2026-10-09.* The client work is confidential to the owner's current
+employer, and a website is public and indexed, unlike a resume sent to one
+recruiter. So:
 
-Detail is held **at or below the specificity the resume already uses**: no
-internal system names beyond XCEED, WoW, and AMS as already written; no
-architecture detail not inferable from the public product; no metric that cannot
-be defended in an interview.
+- **No client names, no client product or system names, no live links, no client
+  screenshots.** Each engagement is described by domain and project type, e.g.
+  "Pharma · enterprise web: multi-portal platform with two-tier RBAC", or "a
+  global e-commerce company".
+- A short note states that client names are withheld under confidentiality.
+- The employer (Aziro Technologies) is named, as on LinkedIn.
+- Detail stays at or below the resume's specificity: no architecture detail not
+  inferable from the public product, and no metric that cannot be defended in an
+  interview.
+- The same rule applies to this public repository: code, content, docs, commit
+  messages and the downloadable resume.
 
-The resume already names Dr. Reddy's, Nuvei, Amazon, and Emami, so naming them
-is consistent with existing practice. The distinction acknowledged here is that
-a resume reaches one recruiter while a website is indexed — hence the ceiling on
-specificity rather than a ceiling on naming.
+Every engagement is presented as a written case study with purpose-built
+diagrams.
 
 For a senior role this is a strength, not a limitation: a screenshot shows
 presence, a diagram shows system comprehension.
@@ -257,9 +258,9 @@ as the reader scrolls** (scroll-pinned). This is the site's signature
 interaction — substantive rather than decorative.
 
 1. **Two-tier RBAC model** — super admin / limited admin enforced across the
-   Admin, SPOC, and Customer portals (XCEED)
+   admin, partner and customer portals (pharma enterprise platform)
 2. **Ionic -> React Native migration** — hybrid webview versus native bridge,
-   and what moved (Amazon)
+   and what moved (warehouse mobile apps)
 3. **Ticket lifecycle** — creation -> assignment -> tracking -> escalation ->
    resolution (independent MERN project)
 
@@ -270,8 +271,11 @@ they respond to the active theme without a second asset.
 
 ## 6. Design system
 
-Dark is the default. **Light mode is a first-class citizen**, contrast-verified
-rather than an afterthought.
+*Amended 2026-10-09:* on the first visit the theme follows the visitor's OS
+setting, falling back to dark when there is none. Once the visitor uses the
+toggle, their choice is remembered. **Both themes are first-class**,
+contrast-verified rather than an afterthought. The detailed design-system spec is
+`2026-10-09-design-system-design.md`.
 
 ### Color
 

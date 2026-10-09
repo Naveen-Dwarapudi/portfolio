@@ -34,3 +34,6 @@ Thumbs.db
 # editors
 .idea/
 *.swp
+
+# superpowers scratch (brainstorm mockups, plan ledgers)
+.superpowers/

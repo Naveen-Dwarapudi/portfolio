@@ -40,22 +40,22 @@ Resolve version numbers against the registry at implementation time. They are no
 
 ## Architecture (planned)
 
-- **Routes:** `/` is a single scrolling narrative. `/work/<slug>` holds six case studies (xceed-api, nuvei-bill-pay, ich-portal, amazon-warehouse-apps, emami-frankross, support-ticket-system). `/resume` is a viewer plus download. Every route has localized variants under a `[locale]` segment: `/` (en), `/hi`, `/te`.
+- **Routes:** `/` is a single scrolling narrative. `/work/<slug>` holds six case studies (pharma-enterprise-portals, municipal-bill-payment, workflow-portal, warehouse-mobile-migration, healthcare-ecommerce-app, support-ticket-system). `/resume` is a viewer plus download. Every route has localized variants under a `[locale]` segment: `/` (en), `/hi`, `/te`.
 - **Content is typed TypeScript modules per locale**, not prose files. A missing translation must fail `tsc`. A Vitest test also asserts catalog completeness across `messages/{en,hi,te}.json`.
 - **Case studies share one fixed spine:** Context → My role → Problem → Approach (anchored by one diagram) → Key decisions (2–4, each with its tradeoff) → Impact → Stack.
-- **Signature diagrams:** three hand-authored inline SVGs (XCEED RBAC, Ionic→RN migration, ticket lifecycle). They assemble step by step on scroll and are themed via CSS custom properties, never as separate asset files.
+- **Signature diagrams:** three hand-authored inline SVGs (two-tier RBAC, Ionic→RN migration, ticket lifecycle). They assemble step by step on scroll and are themed via CSS custom properties, never as separate asset files.
 - **Absolute URLs** (metadata, OG, sitemap, hreflang) derive only from `NEXT_PUBLIC_SITE_URL`. Never hardcode a domain.
 - **Contact form:** a Server Action with Zod validation, sent via Resend, with a honeypot, Cloudflare Turnstile, and a per-IP rate limit.
 - Noto Sans Telugu and Noto Sans Devanagari load **only** on their own locales.
 
 ## Hard constraints
 
-- **Confidentiality:** no client screenshots. Case-study detail stays at or below the resume's specificity: no internal system names beyond XCEED, WoW, and AMS, and no metric the owner can't defend in an interview. Only the self-owned Support Ticket System may show real screenshots.
-- **Motion:** it explains, never decorates. `prefers-reduced-motion` is honored everywhere. Content is server-rendered and never gated behind animation.
+- **Confidentiality (public repo and public site):** never name the current employer's clients or their products/systems, link their live sites, or show client screenshots, in code, content, docs or commit messages. Describe engagements by domain and project type ("Pharma · enterprise web", "a global e-commerce company"). The employer, Aziro Technologies, may be named. No metric the owner can't defend in an interview. Only the self-owned Support Ticket System may show real screenshots.
+- **Motion:** the owner wants the site visually rich and interactive (animated hero, scroll reveals, cursor effects, count-ups, theme wipe). Prefer CSS and scroll-driven animations; keep JS small and lazy-load Motion. `prefers-reduced-motion` is honored everywhere. Content is server-rendered and never gated behind animation.
 - **Performance budget (CI-enforced in `lighthouserc.json`):** Lighthouse ≥ 95 in all four categories on mobile, CLS < 0.02, LCP ≤ 2500 ms, script transfer ≤ 150 KiB. These replace the original LCP < 1.5 s / JS ≈ 120 KB targets (spec §7, amended), because the empty Next.js baseline already measures about 2170 ms and 134 KiB. Never raise a budget to make CI pass; lazy-load instead.
 - **Zero cost:** everything must run on free tiers (Vercel Hobby, GitHub Actions on the public repo, the Resend free tier, Cloudflare Turnstile). Flag anything paid and offer a free alternative.
-- **Accessibility:** WCAG 2.1 AA, with axe checks on every route in **both** themes. Dark is the default, and light mode must be equally contrast-verified.
-- **Design:** one accent colour only (amber/copper) on a cool near-black base. Monospace is confined to structural metadata (section numbers, dates, stack chips).
+- **Accessibility:** WCAG 2.1 AA, with axe checks on every route in **both** themes. On first visit the theme follows the visitor's OS setting (dark if none), and a toggle choice is remembered. Both themes must be equally contrast-verified.
+- **Design:** one accent colour only, burnt orange (`#FF8A3D` dark / `#B4470F` light), on a cool near-black base. Headings use Bricolage Grotesque, body Geist, labels Geist Mono. See `docs/superpowers/specs/2026-10-09-design-system-design.md`. Monospace is confined to structural metadata (section numbers, dates, stack chips).
 - Hindi and Telugu copy are machine-assisted drafts, and the owner must review them before a locale ships.
 - **Open item:** the "5 production applications" headline metric needs an owner decision before phase 3 (spec §4).
 
