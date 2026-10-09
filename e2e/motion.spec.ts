@@ -5,7 +5,9 @@ test("reduced motion shows the final state with no movement", async ({
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await expect(page.getByText("client engagements")).toBeVisible();
+  await expect(
+    page.getByText("client engagements", { exact: true }),
+  ).toBeVisible();
   const metric = page.locator("dd").filter({ hasText: "30" });
   await expect(metric).toContainText("30");
 
@@ -37,6 +39,8 @@ test("content is complete when app JavaScript fails to load", async ({
     page.getByRole("img", { name: /Portrait of Bhavani Sankar/ }),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Production apps, not side quests." }),
+    page.getByRole("heading", {
+      name: "Five client engagements, one standard.",
+    }),
   ).toBeVisible();
 });
