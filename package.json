@@ -16,7 +16,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:e2e": "playwright test",
-    "lhci": "lhci autorun"
+    "lhci": "node scripts/lhci.mjs"
   },
   "dependencies": {
     "next": "16.4.0",

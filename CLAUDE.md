@@ -11,7 +11,7 @@ Node 24 (`.nvmrc`). Run `npm run build` before E2E or Lighthouse, since both ser
 - `npm run typecheck`: runs `next typegen` then `tsc --noEmit`. Plain `tsc` fails on a clean checkout because `LayoutProps` and other route types are generated.
 - `npm run test`: Vitest, single run. Single file: `npx vitest run src/lib/site-url.test.ts`. Single test: add `-t "<name>"`.
 - `npm run test:e2e`: Playwright on port 3100. Single spec: `npx playwright test e2e/smoke.spec.ts`.
-- `npm run lhci`: Lighthouse CI budgets (`lighthouserc.json`). Locally on macOS without Chrome, set `CHROME_PATH` to Playwright's Chromium.
+- `npm run lhci`: Lighthouse CI budgets (`lighthouserc.json`) via `scripts/lhci.mjs`, which first benchmarks the host CPU and calibrates `cpuSlowdownMultiplier` so every machine simulates the same phone the budgets were set on (`scripts/lhci-calibration.mjs`, reference benchmarkIndex 4480). Never change the reference or the budgets to make CI pass. Locally on macOS without Chrome, set `CHROME_PATH` to Playwright's Chromium.
 
 CI (`.github/workflows/ci.yml`) runs `verify`, then `e2e` and `lighthouse` in parallel, on every PR and on pushes to `main`.
 
