@@ -45,7 +45,7 @@ Phase 4 is split in two:
 
 | Concern | Decision |
 |---|---|
-| Route | `src/app/work/[slug]/page.tsx` with `generateStaticParams()` over all slugs and `dynamicParams = false`, so unknown slugs 404 at the framework level. |
+| Route | `src/app/work/[slug]/page.tsx` with `generateStaticParams()` over all slugs. Unknown slugs get a real 404 from `src/proxy.ts`, since `dynamicParams = false` is unavailable with Cache Components (see §6). |
 | Content | `src/content/en/case-studies.ts` exports `caseStudies: CaseStudy[]`, typed by `src/content/types.ts`. The array order is the pager order. |
 | Lookup | `getCaseStudy(slug)` and `getAdjacent(slug)` (previous/next, wrapping) live in `src/content/case-studies.ts`, which is pure and unit-tested. |
 | Metadata | `generateMetadata()` sets the title to `"{title} \| Naveen Dwarapudi"` and the description to the case-study summary. |
@@ -330,3 +330,7 @@ facts**, and the owner must confirm each one is defensible.
 | Transitions | CSS cross-document View Transitions | zero JS; degrades to normal navigation |
 | Home links | a "Read case study →" link inside the cards | no nested interactive elements |
 | Trade-offs | written by Claude, marked ✱, owner-approved | the resume records decisions, not trade-offs |
+| 404s for unknown slugs | `src/proxy.ts` rewrite, scoped to `/work/:slug` | `dynamicParams = false` is unavailable with Cache Components; without Proxy, unknown slugs got a 200 soft-404 |
+| Outline sections | no `scroll-reveal` | a scroll-linked fade left the first section at ~30% opacity until the reader scrolled (Lighthouse colour-contrast) |
+| Logo link name | visible "ND." + sr-only label | the phase 2 `aria-label` hid the visible text (WCAG 2.5.3) |
+| Self-owned screenshot | `Screenshot eager` | above the fold on phones (LCP) |

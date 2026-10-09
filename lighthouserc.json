@@ -3,7 +3,10 @@
     "collect": {
       "startServerCommand": "npm run start -- --port 3200",
       "startServerReadyPattern": "Ready",
-      "url": ["http://localhost:3200/"],
+      "url": [
+        "http://localhost:3200/",
+        "http://localhost:3200/work/pharma-enterprise-portals"
+      ],
       "numberOfRuns": 3
     },
     "assert": {
