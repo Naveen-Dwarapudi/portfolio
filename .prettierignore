@@ -1,0 +1,12 @@
+.next
+node_modules
+package-lock.json
+coverage
+playwright-report
+test-results
+blob-report
+.lighthouseci
+public
+docs
+AGENTS.md
+.superpowers
