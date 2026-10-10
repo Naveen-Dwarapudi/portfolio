@@ -279,6 +279,204 @@ body::after {
   }
 }
 
+/* ---------- Case-study diagrams (spec 2026-10-10) ----------
+   Static and complete by default. Only with scroll-timeline support, motion
+   allowed and a ≥1024px screen does the stage stick and assemble on scroll. */
+.dg-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.dg-box {
+  fill: var(--surface-2);
+  stroke: var(--line-strong);
+  stroke-width: 1.2;
+}
+
+.dg-hot {
+  fill: color-mix(in srgb, var(--accent) 14%, var(--surface-2));
+  stroke: var(--accent);
+}
+
+.dg-t {
+  fill: var(--text);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.dg-s {
+  fill: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.dg-lane {
+  fill: none;
+  stroke: var(--line);
+  stroke-dasharray: 4 4;
+}
+
+.dg-wire {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1.6;
+}
+
+.dg-wire-hot {
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.dg-dash {
+  stroke-dasharray: 6 5;
+}
+
+.dg-x {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.dg-arrow-hot {
+  fill: var(--accent);
+}
+
+.dg-canvas {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  padding: 12px;
+}
+
+/* Phones: keep labels readable (≥ ~11px) by holding a minimum width; the
+   canvas scrolls sideways inside itself, never the page. */
+.dg-canvas .dg-svg {
+  min-width: 560px;
+}
+
+@media (min-width: 1024px) {
+  .dg-canvas .dg-svg {
+    min-width: 0;
+  }
+}
+
+.dg-stage {
+  display: grid;
+  gap: 2rem;
+}
+
+.dg-steps {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: dg;
+}
+
+.dg-step {
+  display: grid;
+  grid-template-columns: 1.75rem 1fr;
+  gap: 0.625rem;
+  color: var(--text);
+  counter-increment: dg;
+}
+
+.dg-step::before {
+  content: counter(dg, decimal-leading-zero);
+  padding-top: 0.2em;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+}
+
+/* Two columns only where the SVG keeps ≥ ~0.85 scale (tablets would shrink
+   labels to ~7px). Content is top-aligned so it starts right under the
+   Approach heading. */
+@media (min-width: 1024px) {
+  .dg-stage {
+    grid-template-columns: minmax(15rem, 0.9fr) 1.6fr;
+    align-items: start;
+  }
+}
+
+@keyframes dg-appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes dg-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Upcoming steps are muted (still AA), never faded below contrast. */
+@keyframes dg-lit {
+  from {
+    color: var(--muted);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
+    .dg-stage-track {
+      view-timeline-name: --diagram;
+      height: 340vh;
+    }
+
+    .dg-stage {
+      position: sticky;
+      top: 6rem;
+      min-height: calc(100vh - 8rem);
+    }
+
+    .dg-part {
+      animation: dg-appear linear both;
+      animation-timeline: --diagram;
+      transform-box: fill-box;
+    }
+
+    .dg-draw {
+      stroke-dasharray: 1;
+      animation: dg-draw linear both;
+      animation-timeline: --diagram;
+    }
+
+    .dg-step {
+      animation: dg-lit linear both;
+      animation-timeline: --diagram;
+    }
+
+    /* Step 1 starts while the stage scrolls in, so the canvas is never
+       empty when it pins. */
+    .dg-s1 {
+      animation-range: entry 20% contain 8%;
+    }
+    .dg-s2 {
+      animation-range: contain 18% contain 32%;
+    }
+    .dg-s3 {
+      animation-range: contain 38% contain 52%;
+    }
+    .dg-s4 {
+      animation-range: contain 58% contain 72%;
+    }
+    .dg-s5 {
+      animation-range: contain 76% contain 90%;
+    }
+  }
+}
+
 /* Theme wipe: drop the browser's default cross-fade so only the clip-path
    circle is visible. Scoped to .theme-wipe (set by theme-toggle.tsx while the
    wipe runs) so page-to-page navigation keeps its cross-fade. */
