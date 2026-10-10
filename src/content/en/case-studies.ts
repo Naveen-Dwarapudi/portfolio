@@ -19,12 +19,34 @@ export const caseStudies: CaseStudy[] = [
     problem:
       "Three portals serving different audiences had to share one platform without leaking data between roles. The UI also had to be redesigned and new functionality shipped, on schedule.",
     approach: [
-      "Rebuilt each portal in React.js, TypeScript and Material-UI on a shared component library.",
-      "Enforced one two-tier RBAC model (super admin / limited admin) across all three portals.",
-      "Kept shared multi-role state in Redux Toolkit so the portals stayed consistent as usage scaled.",
-      "Moved every UI string into JSON language files, so new languages are configuration only.",
-      "Integrated REST APIs with the backend team to power live B2B ordering and customer onboarding.",
+      "Three portals serve three audiences: admins, internal staff and customers.",
+      "One authentication and RBAC model sits in front of all three.",
+      "Two admin tiers: super admin gets everything, limited admin a restricted set.",
+      "Cross-role access is blocked: nobody reaches a portal their role doesn't allow.",
     ],
+    diagram: {
+      kind: "rbac",
+      title: "One access model, three portals",
+      ariaLabel:
+        "Diagram: super admins, limited admins, internal staff and customers pass through one authentication and two-tier RBAC model to their own portal; cross-role access is blocked.",
+      labels: {
+        who: "WHO",
+        how: "HOW",
+        where: "WHERE",
+        superAdmin: "Super admin",
+        limitedAdmin: "Limited admin",
+        staff: "Internal staff",
+        customer: "Customer",
+        adminPortal: "Admin portal",
+        staffPortal: "Staff portal",
+        customerPortal: "Customer portal",
+        model: "Auth + RBAC",
+        modelNote: "ONE MODEL",
+        tierAll: "Super admin: all",
+        tierSubset: "Limited: subset",
+        blocked: "CROSS-ROLE ACCESS BLOCKED",
+      },
+    },
     decisions: [
       {
         decision: "One two-tier RBAC model for all three portals.",
@@ -176,12 +198,37 @@ export const caseStudies: CaseStudy[] = [
     problem:
       "Replace the legacy hybrid apps with native-performance Android and iOS builds, and keep warehouse-floor workflows fast and observable.",
     approach: [
-      "Rebuilt the apps in React Native and TypeScript, with Redux Toolkit and RTK Query.",
-      "Integrated QR/barcode scanning into core warehouse workflows.",
-      "Applied memoisation across high-traffic screens.",
-      "Set up Firebase, CleverTap and New Relic for crash, usage and performance monitoring.",
-      "Configured separate dev/staging/production builds and CI/CD pipelines.",
+      "Before: the UI ran as web code inside a WebView, wrapped in a native shell.",
+      "After: the UI is rebuilt as real native components with React Native.",
+      "QR/barcode scanning is wired into the core warehouse workflows.",
+      "Crash, usage and performance monitoring, plus separate dev, staging and prod builds.",
     ],
+    diagram: {
+      kind: "migration",
+      title: "From a WebView to native",
+      ariaLabel:
+        "Diagram: before, an Ionic app renders web UI in a WebView inside a native shell; after, React Native renders native Android and iOS components, with scanning, monitoring and three build environments.",
+      labels: {
+        before: "BEFORE · IONIC",
+        after: "AFTER · REACT NATIVE",
+        shell: "NATIVE SHELL",
+        webview: "WEBVIEW",
+        webCode: "HTML · CSS · JS",
+        webUi: "WEB UI",
+        plugins: "PLUGINS FOR DEVICE APIs",
+        rn: "React Native · TypeScript",
+        rnState: "REDUX TOOLKIT · RTK QUERY",
+        nativeUi: "Native UI components",
+        platforms: "ANDROID · iOS",
+        scanning: "QR / barcode",
+        scanningNote: "SCANNING",
+        monitoring: "Monitoring",
+        monitoringNote: "CRASH · PERF",
+        dev: "DEV",
+        staging: "STAGING",
+        prod: "PROD",
+      },
+    },
     decisions: [
       {
         decision: "Migrate to React Native rather than keep the hybrid stack.",
@@ -263,11 +310,29 @@ export const caseStudies: CaseStudy[] = [
     problem:
       "Model a complete support workflow, with tickets moving through creation, assignment, tracking, escalation and resolution, and different powers for admins and users.",
     approach: [
-      "REST API in Node.js and Express.js, with data modelled in MongoDB using Mongoose.",
-      "JWT-based authentication and role-based authorization across the Admin and User tiers.",
-      "React.js and TypeScript frontend, with Redux Toolkit and RTK Query for state and data fetching.",
-      "Frontend deployed on Vercel and backend on Render, as a live, public app.",
+      "Every request passes JWT authentication and role checks (Admin / User).",
+      "A ticket is created, then assigned.",
+      "It's tracked while work is in progress.",
+      "If it needs more attention, it's escalated.",
+      "Finally it's resolved, closing the lifecycle.",
     ],
+    diagram: {
+      kind: "lifecycle",
+      title: "A ticket's life, end to end",
+      ariaLabel:
+        "Diagram: behind JWT authentication and Admin/User role checks, a ticket moves from created to assigned to in progress, may be escalated, and ends resolved.",
+      labels: {
+        auth: "JWT authentication · role checks",
+        authNote: "ADMIN · USER TIERS",
+        lifecycle: "LIFECYCLE",
+        created: "Created",
+        assigned: "Assigned",
+        inProgress: "In progress",
+        tracked: "TRACKED",
+        escalated: "Escalated",
+        resolved: "Resolved",
+      },
+    },
     decisions: [
       {
         decision: "JWT authentication.",
