@@ -83,10 +83,10 @@ export const homeContent: HomeContent = {
         slug: "municipal-bill-payment",
         title: "Municipal bill payment platform",
         summary:
-          "Built two responsive single-page apps, admin and citizen, giving municipal staff and residents one place to manage and pay bills online.",
+          "Feature development on a large-scale fintech platform where municipal staff manage bills and residents pay them online.",
         highlights: [
-          "Context API-based authentication across both portals.",
-          "Integrated Strapi CMS so non-technical staff publish content without engineering.",
+          "Built payment features such as void and refund across the admin and citizen portals.",
+          "Worked with Strapi CMS, which manages the platform's content in multiple languages.",
           "Supported every QA cycle and production deployment without a rollback.",
         ],
         stack: [

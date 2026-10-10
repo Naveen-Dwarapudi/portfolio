@@ -90,39 +90,35 @@ export const caseStudies: CaseStudy[] = [
     kicker: "Fintech · Municipal payments",
     title: "Municipal bill payment platform",
     summary:
-      "Two single-page apps giving municipal staff and residents one place to manage and pay bills online.",
+      "Feature development on a large-scale fintech platform where municipal staff manage bills and residents pay them online.",
     facts: { role: "Frontend developer", platform: "Web" },
     context:
-      "A payments platform for municipalities, with an admin portal for municipal staff and a citizen portal for residents paying their bills online.",
-    role: "As a frontend developer, I built both single-page apps, their authentication and a shared component set; integrated Strapi CMS; managed source control across Bitbucket and Azure DevOps Repos; and tracked sprints in JIRA and Azure DevOps Boards.",
+      "An established, large-scale fintech platform for municipal bill payments, with an admin portal for municipal staff and a citizen portal for residents. I joined its existing team and codebase to build new features.",
+    role: "As a frontend developer on the team, I built features across both portals, such as void and refund, with React.js, TypeScript and Material-UI; worked with Strapi CMS, which manages the platform's content in multiple languages; managed source control across Bitbucket and Azure DevOps Repos; and tracked sprints in JIRA and Azure DevOps Boards.",
     problem:
-      "Residents needed a simple way to pay bills. Staff needed to manage them, and to publish content updates without waiting on engineers.",
+      "Changes to a live payments platform have to land without disturbing the payments flowing through it. Features like void and refund move money directly, and every screen has to work in each language the platform serves.",
     approach: [
-      "Built two responsive React.js and TypeScript single-page apps with Material-UI.",
-      "Implemented authentication with the Context API across both portals.",
-      "Developed a reusable, modular component set shared by both portals.",
-      "Integrated Strapi CMS so non-technical staff publish content directly.",
+      "Built features such as void and refund inside a large, existing React.js and TypeScript codebase.",
+      "Followed the platform's established patterns, including its Context API-based authentication and the components shared by both portals.",
+      "Worked with Strapi CMS, which manages the platform's content in multiple languages.",
+      "Took every change through QA cycles and production deployments.",
     ],
     decisions: [
       {
-        decision: "Context API for authentication state.",
+        decision:
+          "Follow the platform's existing patterns rather than introduce new ones.",
         tradeoff:
-          "Lighter than Redux for the narrow state two portals share, at the cost of Redux's devtools and middleware if that state grows.",
+          "Changes stay consistent and easy to review in a large codebase, at the cost of sometimes working within a pattern I might have designed differently.",
       },
       {
-        decision: "Strapi CMS for content.",
+        decision: "Keep language content in Strapi CMS, not in the code.",
         tradeoff:
-          "Staff publish without engineering, but there is a CMS to run and keep in step with the frontend.",
-      },
-      {
-        decision: "One component set for both portals.",
-        tradeoff:
-          "New screens build faster and look consistent, but a change to a shared component has to be checked in both apps.",
+          "Text and translations change without a release, but the frontend has to handle content that differs, or is missing, per language.",
       },
     ],
     impact: [
-      "Every QA cycle and production deployment supported without a rollback incident.",
-      "Non-technical staff publish content directly, removing engineering from the content-update loop.",
+      "Shipped payment features such as void and refund to production on a large-scale fintech platform.",
+      "Supported every QA cycle and production deployment without a rollback incident.",
     ],
     stack: [
       "React.js",

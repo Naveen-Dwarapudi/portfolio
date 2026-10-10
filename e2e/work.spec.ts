@@ -80,7 +80,7 @@ test("each case study has its own title and description", async ({ page }) => {
   );
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     "content",
-    /^Two single-page apps/,
+    /^Feature development on a large-scale fintech platform/,
   );
 });
 
