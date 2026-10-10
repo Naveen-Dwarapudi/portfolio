@@ -1,32 +1,13 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import { SiteFooter } from "@/components/site/site-footer";
-import { SiteHeader } from "@/components/site/site-header";
 import { SkipLink } from "@/components/ui/skip-link";
-import { homeContent } from "@/content/en";
+import { getContent } from "@/content";
+import { localeInfo } from "@/lib/i18n";
+import { localeParams, requirePublishedLocale } from "@/lib/locale-params";
 import { siteUrl } from "@/lib/site-url";
 import { themeInitScript } from "@/lib/theme";
-import "./globals.css";
-
-const geist = localFont({
-  src: "../fonts/geist-400-500-latin.woff2",
-  weight: "400 500",
-  variable: "--font-geist",
-  display: "swap",
-});
-const geistMono = localFont({
-  src: "../fonts/geist-mono-400-latin.woff2",
-  weight: "400",
-  variable: "--font-geist-mono",
-  display: "swap",
-  preload: false,
-});
-const bricolage = localFont({
-  src: "../fonts/bricolage-grotesque-800-latin.woff2",
-  weight: "800",
-  variable: "--font-bricolage",
-  display: "swap",
-});
+import { fontVariables } from "../fonts";
+import "../globals.css";
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
@@ -35,19 +16,27 @@ export const metadata: Metadata = {
     "Portfolio of Bhavani Sankar Naveen Dwarapudi, a React.js and React Native engineer with 4+ years building production web and mobile applications.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export function generateStaticParams() {
+  return localeParams();
+}
+
+export default async function RootLayout({
+  children,
+  params,
+}: LayoutProps<"/[lang]">) {
+  const locale = requirePublishedLocale((await params).lang);
+  const { homeContent } = getContent(locale);
   return (
     <html
-      lang="en"
+      lang={localeInfo(locale).htmlLang}
       suppressHydrationWarning
-      className={`${geist.variable} ${geistMono.variable} ${bricolage.variable} antialiased`}
+      className={`${fontVariables} antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="flex min-h-dvh flex-col">
         <SkipLink />
-        <SiteHeader site={homeContent.site} nav={homeContent.nav} />
         {children}
         <SiteFooter
           footer={homeContent.footer}

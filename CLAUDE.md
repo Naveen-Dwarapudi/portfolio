@@ -26,18 +26,19 @@ This Next version differs from older training data. Read the bundled docs in `no
 - Content source of truth: `src/resume/Naveen Dwarapudi Resume.pdf`. Headshots and screenshots are in `src/images/` (`mypic-2.jpeg` is the hero, `mypic-1.jpeg` is the about section).
 - Design source of truth: `docs/superpowers/specs/`. Phase plans: `docs/superpowers/plans/`.
 - Design tokens live in `src/app/globals.css` (dark base; light via `prefers-color-scheme` or `[data-theme="light"]`). Use the Tailwind names (`bg-bg`, `text-muted`, `text-accent`, `border-line`, `font-display`, `text-display`), never raw hex.
-- Theme: `src/lib/theme.ts` plus the inline script in `layout.tsx`; the toggle is `src/components/theme/theme-toggle.tsx`.
+- Theme: `src/lib/theme.ts` plus the inline script in `src/app/[lang]/layout.tsx` (and `global-not-found.tsx`); the toggle is `src/components/theme/theme-toggle.tsx`.
 - Motion: CSS first (`.fade-up`, `.line-reveal-line`, `.scroll-reveal`). Client effects are in `src/components/motion/`. Every effect must honour reduced motion and must not hide content when JS fails.
 - JS budget: don't use `next/link` or the `<Image>` component (use `<a>` and `getImageProps()`), and don't add Motion, `next-themes` or similar without measuring with LHCI.
 - Fonts are local subsets (Bricolage 800, Geist 400–500, Geist Mono 400): regenerate per `src/fonts/README.md`, never swap in the full Google fonts. New weights or glyphs mean regenerating.
-- Page copy lives in `src/content/en/` (`home.ts`, `case-studies.ts`, re-exported by `index.ts`; typed by `src/content/types.ts`); components never hard-code user-visible text.
+- Page copy lives in `src/content/<locale>/` (English in `en/`: `home.ts`, `case-studies.ts`, re-exported by `index.ts`; typed by `src/content/types.ts`); components get it from `getContent(locale)` and never hard-code user-visible text.
 - Images: `Screenshot` (lazy) or `Portrait` (eager) via `getImageProps`; AVIF is enabled. Mind bytes fetched before LCP, since Chrome may fetch lazy images early.
 - External links: `newTabLabel={homeContent.newTab}` on `ButtonLink`/`TextLink`; if the visible text is generic ("Live site"), add an explicit `aria-label`.
 - Cache Components: no `new Date()` / `Math.random()` in render; use `"use cache"` (see `CopyrightYear`).
-- Case studies: typed data in `src/content/en/case-studies.ts` (`CaseStudy`), one template (`src/components/case-study/`), route `src/app/work/[slug]`. `src/proxy.ts` returns real 404s for unknown slugs (Cache Components forbids `dynamicParams = false`); keep its slug set in sync by importing `caseStudies`, never a hard-coded list.
+- Case studies: typed data in `src/content/en/case-studies.ts` (`CaseStudy`), one template (`src/components/case-study/`), route `src/app/[lang]/work/[slug]`. `src/proxy.ts` handles locales (see Architecture → Routes) and returns real 404s for unknown slugs (Cache Components forbids `dynamicParams = false`); keep its slug set in sync by importing `caseStudies`, never a hard-coded list.
 - Don't put scroll-linked reveals on reading content that can be on screen at load: it stays partly transparent until the reader scrolls.
 - Links with visible text keep that text in their accessible name (WCAG 2.5.3): add context with sr-only text, or start `aria-label` with the visible text.
 - Diagrams: typed `diagram` on a `CaseStudy` (kind-specific labels), SVGs in `src/components/diagrams/`, animation only in `globals.css` (`dg-*`). Parts use `dg-part`/`dg-draw` plus `dg-sN`, where N ≤ the study's step count. Never dim text with opacity in scroll animations; animate the colour between AA-safe tokens.
+- The site header is rendered by each page (it needs the page's path for the language switcher), not by the layout. Every 404 is `src/app/global-not-found.tsx`.
 - jsdom test helpers: `mockMatchMedia([...queries])` from `@/test/setup`; storage and `data-theme` reset after each test.
 
 ## What this is
@@ -46,16 +47,16 @@ A Next.js personal portfolio for a React / React Native engineer, aimed at senio
 
 ## Planned stack (see spec §3)
 
-Next.js App Router · TypeScript `strict` · Tailwind CSS v4 (CSS-first `@theme`, **no `tailwind.config.js`**) · Motion · next-intl · cmdk · Server Actions + Zod + react-hook-form · Resend · Vitest + RTL · Playwright + axe-core · Lighthouse CI · lucide-react.
+Next.js App Router · TypeScript `strict` · Tailwind CSS v4 (CSS-first `@theme`, **no `tailwind.config.js`**) · Motion · no i18n library (Next's [lang] + Proxy pattern) · cmdk · Server Actions + Zod + react-hook-form · Resend · Vitest + RTL · Playwright + axe-core · Lighthouse CI · lucide-react.
 
 Resolve version numbers against the registry at implementation time. They are not pinned in the spec.
 
-**Explicitly rejected, do not introduce:** three.js/WebGL, MDX, any CMS, Swiper (use CSS scroll-snap), a blog, auth or a database, `output: export` / GitHub Pages hosting (it breaks Server Actions and next-intl routing).
+**Explicitly rejected, do not introduce:** three.js/WebGL, MDX, any CMS, Swiper (use CSS scroll-snap), a blog, auth or a database, `output: export` / GitHub Pages hosting (it breaks Server Actions and Proxy locale routing).
 
 ## Architecture (planned)
 
-- **Routes:** `/` is a single scrolling narrative. `/work/<slug>` holds six case studies (pharma-enterprise-portals, municipal-bill-payment, workflow-portal, warehouse-mobile-migration, healthcare-ecommerce-app, support-ticket-system). `/resume` is a viewer plus download. Every route has localized variants under a `[locale]` segment: `/` (en), `/hi`, `/te`.
-- **Content is typed TypeScript modules per locale**, not prose files. A missing translation must fail `tsc`. A Vitest test also asserts catalog completeness across `messages/{en,hi,te}.json`.
+- **Routes:** `/` is a single scrolling narrative. `/work/<slug>` holds six case studies (pharma-enterprise-portals, municipal-bill-payment, workflow-portal, warehouse-mobile-migration, healthcare-ecommerce-app, support-ticket-system). `/resume` is a viewer plus download. Pages live under `src/app/[lang]/`. English is served unprefixed via `src/proxy.ts` (`/en/...` → 308 → unprefixed); other locales use a `/hi`, `/te` prefix and 404 until `published` in `src/content/locales.ts`.
+- **Content is typed TypeScript modules per locale** (`src/content/<locale>/`, read via `getContent(locale)`), not prose files. A missing translation fails `tsc`. `hi` and `te` re-export English until translated. Publishing runbook: i18n spec §6.
 - **Case studies share one fixed spine:** Context → My role → Problem → Approach (anchored by one diagram) → Key decisions (2–4, each with its tradeoff) → Impact → Stack.
 - **Signature diagrams:** three hand-authored inline SVGs (two-tier RBAC, Ionic→RN migration, ticket lifecycle). They assemble step by step on scroll and are themed via CSS custom properties, never as separate asset files.
 - **Absolute URLs** (metadata, OG, sitemap, hreflang) derive only from `NEXT_PUBLIC_SITE_URL`. Never hardcode a domain.

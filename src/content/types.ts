@@ -47,7 +47,14 @@ export type SideProject = {
 };
 
 export type HomeContent = {
-  site: { homeLabel: string; navLabel: string };
+  site: {
+    homeLabel: string;
+    navLabel: string;
+    /** Accessible name of the language switcher. */
+    languageLabel: string;
+    /** Note beside languages that aren't published yet. */
+    comingSoon: string;
+  };
   nav: NavItem[];
   hero: {
     label: string;
@@ -115,6 +122,13 @@ export type HomeContent = {
   newTab: string;
   techStack: string;
   readCaseStudy: string;
+  notFound: {
+    title: string;
+    heading: string;
+    body: string;
+    home: string;
+    work: string;
+  };
 };
 
 /** Scroll-assembled diagram on a case study's Approach (spec 2026-10-10). */

@@ -7,18 +7,22 @@ import { Screenshot } from "@/components/ui/screenshot";
 import { screenshots } from "@/components/ui/screenshots";
 import { Section } from "@/components/ui/section";
 import { TextLink } from "@/components/ui/text-link";
+import type { Locale } from "@/content/locales";
 import type { HomeContent } from "@/content/types";
+import { localizedPath } from "@/lib/i18n";
 
 export function Projects({
   projects,
   newTabLabel,
   techStackLabel,
   readCaseStudyLabel,
+  locale,
 }: {
   projects: HomeContent["projects"];
   newTabLabel: string;
   techStackLabel: string;
   readCaseStudyLabel: string;
+  locale: Locale;
 }) {
   const p = projects.independent;
   return (
@@ -68,7 +72,7 @@ export function Projects({
                   {projects.liveSite}
                 </ButtonLink>
                 <TextLink
-                  href={`/work/${p.slug}`}
+                  href={localizedPath(locale, `/work/${p.slug}`)}
                   aria-label={`${readCaseStudyLabel}: ${p.title}`}
                   className="text-sm"
                 >
