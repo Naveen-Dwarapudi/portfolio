@@ -1,21 +1,25 @@
 import { Container } from "@/components/ui/container";
 import { TextLink } from "@/components/ui/text-link";
+import type { Locale } from "@/content/locales";
 import type { CaseStudy, CaseStudyUi } from "@/content/types";
+import { localizedPath } from "@/lib/i18n";
 
 export function CaseStudyPager({
   previous,
   next,
   ui,
+  locale,
 }: {
   previous: CaseStudy;
   next: CaseStudy;
   ui: CaseStudyUi;
+  locale: Locale;
 }) {
   return (
     <nav aria-label={ui.pagerLabel} className="border-t border-line">
       <Container className="grid gap-6 py-12 md:grid-cols-[1fr_auto_1fr] md:items-center">
         <a
-          href={`/work/${previous.slug}`}
+          href={localizedPath(locale, `/work/${previous.slug}`)}
           className="group block rounded-[14px] border border-line p-5 transition-colors hover:border-accent/45"
         >
           <span className="font-mono text-label tracking-[0.1em] text-muted uppercase">
@@ -26,11 +30,14 @@ export function CaseStudyPager({
             {previous.title}
           </span>
         </a>
-        <TextLink href="/#experience" className="justify-self-center text-sm">
+        <TextLink
+          href={localizedPath(locale, "/#experience")}
+          className="justify-self-center text-sm"
+        >
           {ui.backToWork}
         </TextLink>
         <a
-          href={`/work/${next.slug}`}
+          href={localizedPath(locale, `/work/${next.slug}`)}
           className="group block rounded-[14px] border border-line p-5 text-right transition-colors hover:border-accent/45"
         >
           <span className="font-mono text-label tracking-[0.1em] text-muted uppercase">

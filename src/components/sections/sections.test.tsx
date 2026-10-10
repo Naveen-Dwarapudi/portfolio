@@ -43,6 +43,7 @@ describe("Experience", () => {
         experience={c.experience}
         techStackLabel={c.techStack}
         readCaseStudyLabel={c.readCaseStudy}
+        locale="en"
       />,
     );
     expect(
@@ -60,6 +61,7 @@ describe("Experience", () => {
         experience={c.experience}
         techStackLabel={c.techStack}
         readCaseStudyLabel={c.readCaseStudy}
+        locale="en"
       />,
     );
     for (const e of c.experience.engagements) {
@@ -69,12 +71,28 @@ describe("Experience", () => {
     }
   });
 
+  it("links case studies in the page's language", () => {
+    render(
+      <Experience
+        experience={c.experience}
+        techStackLabel={c.techStack}
+        readCaseStudyLabel={c.readCaseStudy}
+        locale="hi"
+      />,
+    );
+    const e = c.experience.engagements[0]!;
+    expect(
+      screen.getByRole("link", { name: `${c.readCaseStudy}: ${e.title}` }),
+    ).toHaveAttribute("href", `/hi/work/${e.slug}`);
+  });
+
   it("states that client names are withheld", () => {
     render(
       <Experience
         experience={c.experience}
         techStackLabel={c.techStack}
         readCaseStudyLabel={c.readCaseStudy}
+        locale="en"
       />,
     );
     expect(
@@ -99,6 +117,7 @@ describe("Projects", () => {
         newTabLabel={c.newTab}
         techStackLabel={c.techStack}
         readCaseStudyLabel={c.readCaseStudy}
+        locale="en"
       />,
     );
     const live = screen.getByRole("link", {
@@ -121,6 +140,7 @@ describe("Projects", () => {
         newTabLabel={c.newTab}
         techStackLabel={c.techStack}
         readCaseStudyLabel={c.readCaseStudy}
+        locale="en"
       />,
     );
     expect(screen.getAllByText(c.projects.sideBadge)).toHaveLength(
@@ -136,6 +156,26 @@ describe("Projects", () => {
   });
 });
 
+describe("Projects case-study link", () => {
+  it("links the case study in the page's language", () => {
+    render(
+      <Projects
+        projects={c.projects}
+        newTabLabel={c.newTab}
+        techStackLabel={c.techStack}
+        readCaseStudyLabel={c.readCaseStudy}
+        locale="hi"
+      />,
+    );
+    const slug = c.projects.independent.slug;
+    const hrefs = screen
+      .getAllByRole("link")
+      .map((a) => a.getAttribute("href"));
+    expect(hrefs).toContain(`/hi/work/${slug}`);
+    expect(hrefs).not.toContain(`/work/${slug}`);
+  });
+});
+
 describe("Projects headings", () => {
   it("marks each side-project title as a heading under Side projects", () => {
     render(
@@ -144,6 +184,7 @@ describe("Projects headings", () => {
         newTabLabel={c.newTab}
         techStackLabel={c.techStack}
         readCaseStudyLabel={c.readCaseStudy}
+        locale="en"
       />,
     );
     expect(

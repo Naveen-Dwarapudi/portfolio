@@ -3,16 +3,20 @@ import { Chip } from "@/components/ui/chip";
 import { Heading } from "@/components/ui/heading";
 import { Section } from "@/components/ui/section";
 import { TextLink } from "@/components/ui/text-link";
+import type { Locale } from "@/content/locales";
 import type { HomeContent } from "@/content/types";
+import { localizedPath } from "@/lib/i18n";
 
 export function Experience({
   experience,
   techStackLabel,
   readCaseStudyLabel,
+  locale,
 }: {
   experience: HomeContent["experience"];
   techStackLabel: string;
   readCaseStudyLabel: string;
+  locale: Locale;
 }) {
   return (
     <Section id="experience" index="03" label={experience.label}>
@@ -77,7 +81,7 @@ export function Experience({
                 ))}
               </ul>
               <TextLink
-                href={`/work/${e.slug}`}
+                href={localizedPath(locale, `/work/${e.slug}`)}
                 aria-label={`${readCaseStudyLabel}: ${e.title}`}
                 className="mt-5 inline-block text-sm"
               >

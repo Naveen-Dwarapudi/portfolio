@@ -88,7 +88,9 @@ describe("CaseStudyArticle", () => {
 describe("CaseStudyPager", () => {
   it("links previous, next and back to all work", () => {
     const [a, b] = caseStudies;
-    render(<CaseStudyPager previous={a!} next={b!} ui={caseStudyUi} />);
+    render(
+      <CaseStudyPager previous={a!} next={b!} ui={caseStudyUi} locale="en" />,
+    );
     const nav = screen.getByRole("navigation", {
       name: caseStudyUi.pagerLabel,
     });
@@ -101,5 +103,24 @@ describe("CaseStudyPager", () => {
     expect(
       within(nav).getByRole("link", { name: caseStudyUi.backToWork }),
     ).toHaveAttribute("href", "/#experience");
+  });
+
+  it("keeps the reader in the page's language", () => {
+    const [a, b] = caseStudies;
+    render(
+      <CaseStudyPager previous={a!} next={b!} ui={caseStudyUi} locale="hi" />,
+    );
+    const nav = screen.getByRole("navigation", {
+      name: caseStudyUi.pagerLabel,
+    });
+    expect(
+      within(nav).getByRole("link", { name: new RegExp(a!.title) }),
+    ).toHaveAttribute("href", `/hi/work/${a!.slug}`);
+    expect(
+      within(nav).getByRole("link", { name: new RegExp(b!.title) }),
+    ).toHaveAttribute("href", `/hi/work/${b!.slug}`);
+    expect(
+      within(nav).getByRole("link", { name: caseStudyUi.backToWork }),
+    ).toHaveAttribute("href", "/hi#experience");
   });
 });
