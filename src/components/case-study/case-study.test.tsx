@@ -54,9 +54,22 @@ describe("CaseStudyArticle", () => {
   });
 
   it("shows no screenshot or live link for client work", () => {
-    renderStudy();
-    expect(screen.queryByRole("img")).toBeNull();
+    const { container } = renderStudy();
+    expect(container.querySelector("img")).toBeNull();
     expect(screen.queryByRole("link")).toBeNull();
+  });
+
+  it("renders the diagram stage in Approach only for studies with a diagram", () => {
+    const { container, unmount } = renderStudy(client);
+    expect(container.querySelector("#approach .dg-stage")).not.toBeNull();
+    expect(container.querySelector("#approach ol.list-decimal")).toBeNull();
+    unmount();
+    const plain = caseStudies.find((c) => !c.diagram)!;
+    const { container: plainContainer } = renderStudy(plain);
+    expect(plainContainer.querySelector("#approach .dg-stage")).toBeNull();
+    expect(
+      plainContainer.querySelector("#approach ol.list-decimal"),
+    ).not.toBeNull();
   });
 
   it("shows the eager screenshot and a new-tab live link for the self-owned project", () => {

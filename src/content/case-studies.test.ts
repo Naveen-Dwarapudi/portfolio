@@ -61,6 +61,33 @@ describe("caseStudies content", () => {
   });
 });
 
+describe("case study diagrams", () => {
+  it("puts the three signature diagrams on the right studies", () => {
+    const kinds = Object.fromEntries(
+      caseStudies.map((c) => [c.slug, c.diagram?.kind ?? null]),
+    );
+    expect(kinds).toEqual({
+      "pharma-enterprise-portals": "rbac",
+      "municipal-bill-payment": null,
+      "workflow-portal": null,
+      "warehouse-mobile-migration": "migration",
+      "healthcare-ecommerce-app": null,
+      "support-ticket-system": "lifecycle",
+    });
+  });
+
+  it("gives every diagram a title, an aria summary and non-empty labels", () => {
+    for (const c of caseStudies) {
+      if (!c.diagram) continue;
+      expect(c.diagram.title.trim(), c.slug).not.toBe("");
+      expect(c.diagram.ariaLabel.trim(), c.slug).not.toBe("");
+      for (const [key, label] of Object.entries(c.diagram.labels)) {
+        expect(label.trim(), `${c.slug}.${key}`).not.toBe("");
+      }
+    }
+  });
+});
+
 describe("case study lookup", () => {
   const list = [{ slug: "a" }, { slug: "b" }, { slug: "c" }] as CaseStudy[];
 

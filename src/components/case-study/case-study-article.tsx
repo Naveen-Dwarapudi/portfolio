@@ -1,3 +1,4 @@
+import { ScrollDiagram } from "@/components/diagrams/scroll-diagram";
 import { InteractiveCard } from "@/components/motion/pointer-effects";
 import { BrowserFrame } from "@/components/ui/browser-frame";
 import { ButtonLink } from "@/components/ui/button";
@@ -12,11 +13,14 @@ function Part({
   id,
   index,
   title,
+  wide = false,
   children,
 }: {
   id: string;
   index: number;
   title: string;
+  /** Full container width (diagrams) instead of the reading measure. */
+  wide?: boolean;
   children: ReactNode;
 }) {
   return (
@@ -37,7 +41,9 @@ function Part({
         </span>
         {title}
       </h2>
-      <div className="mt-5 max-w-[720px] text-muted">{children}</div>
+      <div className={`mt-5 text-muted ${wide ? "" : "max-w-[720px]"}`}>
+        {children}
+      </div>
     </section>
   );
 }
@@ -107,12 +113,16 @@ export function CaseStudyArticle({
         <Part id="problem" index={3} title={s.problem}>
           <p>{study.problem}</p>
         </Part>
-        <Part id="approach" index={4} title={s.approach}>
-          <ol className="list-decimal space-y-3 pl-5 marker:font-mono marker:text-accent">
-            {study.approach.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
+        <Part id="approach" index={4} title={s.approach} wide={!!study.diagram}>
+          {study.diagram ? (
+            <ScrollDiagram diagram={study.diagram} steps={study.approach} />
+          ) : (
+            <ol className="list-decimal space-y-3 pl-5 marker:font-mono marker:text-accent">
+              {study.approach.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+            </ol>
+          )}
         </Part>
         <Part id="decisions" index={5} title={s.decisions}>
           <ul className="grid gap-4 md:grid-cols-2">

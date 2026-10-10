@@ -117,6 +117,77 @@ export type HomeContent = {
   readCaseStudy: string;
 };
 
+/** Scroll-assembled diagram on a case study's Approach (spec 2026-10-10). */
+type DiagramBase = {
+  /** Shown above the steps, under the Approach heading. */
+  title: string;
+  /** Summary for the SVG's role="img". */
+  ariaLabel: string;
+};
+
+export type RbacDiagram = DiagramBase & {
+  kind: "rbac";
+  labels: {
+    who: string;
+    how: string;
+    where: string;
+    superAdmin: string;
+    limitedAdmin: string;
+    staff: string;
+    customer: string;
+    adminPortal: string;
+    staffPortal: string;
+    customerPortal: string;
+    model: string;
+    modelNote: string;
+    tierAll: string;
+    tierSubset: string;
+    blocked: string;
+  };
+};
+
+export type MigrationDiagram = DiagramBase & {
+  kind: "migration";
+  labels: {
+    before: string;
+    after: string;
+    shell: string;
+    webview: string;
+    webCode: string;
+    webUi: string;
+    plugins: string;
+    rn: string;
+    rnState: string;
+    nativeUi: string;
+    platforms: string;
+    scanning: string;
+    scanningNote: string;
+    monitoring: string;
+    monitoringNote: string;
+    dev: string;
+    staging: string;
+    prod: string;
+  };
+};
+
+export type LifecycleDiagram = DiagramBase & {
+  kind: "lifecycle";
+  labels: {
+    auth: string;
+    authNote: string;
+    lifecycle: string;
+    created: string;
+    assigned: string;
+    inProgress: string;
+    tracked: string;
+    escalated: string;
+    resolved: string;
+  };
+};
+
+export type CaseStudyDiagram =
+  RbacDiagram | MigrationDiagram | LifecycleDiagram;
+
 export type CaseStudy = {
   slug: string;
   kicker: string;
@@ -127,8 +198,10 @@ export type CaseStudy = {
   context: string;
   role: string;
   problem: string;
-  /** 3–5 steps. */
+  /** 3–5 steps. With a diagram, these are the diagram's steps (dg-s1…dg-s5). */
   approach: string[];
+  /** Scroll-assembled diagram; replaces the plain Approach list. */
+  diagram?: CaseStudyDiagram;
   /** 2–4 decisions, each with its trade-off. */
   decisions: { decision: string; tradeoff: string }[];
   /** Resume-backed outcomes only. */
