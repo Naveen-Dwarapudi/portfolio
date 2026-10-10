@@ -120,14 +120,17 @@ export function Projects({
                   </li>
                 ))}
               </ul>
-              <TextLink
-                href={s.liveUrl}
-                newTabLabel={newTabLabel}
-                aria-label={`${projects.liveSite}: ${s.title} ${newTabLabel}`}
-                className="mt-4 inline-block text-sm"
-              >
-                {projects.liveSite}
-              </TextLink>
+              <div className="mt-5">
+                <ButtonLink
+                  variant="secondary"
+                  href={s.liveUrl}
+                  arrow="↗"
+                  newTabLabel={newTabLabel}
+                  aria-label={`${projects.liveSite}: ${s.title} ${newTabLabel}`}
+                >
+                  {projects.liveSite}
+                </ButtonLink>
+              </div>
             </InteractiveCard>
           </li>
         ))}

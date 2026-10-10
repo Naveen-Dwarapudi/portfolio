@@ -38,6 +38,7 @@ This Next version differs from older training data. Read the bundled docs in `no
 - Don't put scroll-linked reveals on reading content that can be on screen at load: it stays partly transparent until the reader scrolls.
 - Links with visible text keep that text in their accessible name (WCAG 2.5.3): add context with sr-only text, or start `aria-label` with the visible text.
 - Diagrams: typed `diagram` on a `CaseStudy` (kind-specific labels), SVGs in `src/components/diagrams/`, animation only in `globals.css` (`dg-*`). Parts use `dg-part`/`dg-draw` plus `dg-sN`, where N ≤ the study's step count. Never dim text with opacity in scroll animations; animate the colour between AA-safe tokens.
+- The header is sticky. `--header-h` in `globals.css` drives `scroll-padding-top` and sticky offsets (the diagram stage); update it if the header's height changes.
 - The site header is rendered by each page (it needs the page's path for the language switcher), not by the layout. Every 404 is `src/app/global-not-found.tsx`.
 - jsdom test helpers: `mockMatchMedia([...queries])` from `@/test/setup`; storage and `data-theme` reset after each test.
 

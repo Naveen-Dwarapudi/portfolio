@@ -91,6 +91,16 @@
 /* ---------- Base ---------- */
 html {
   background: var(--bg);
+  /* The sticky header's height (plus a little air), so in-page jumps and
+     sticky stages never sit underneath it. */
+  --header-h: 4.75rem;
+  scroll-padding-top: calc(var(--header-h) + 1rem);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -436,8 +446,8 @@ body::after {
 
     .dg-stage {
       position: sticky;
-      top: 6rem;
-      min-height: calc(100vh - 8rem);
+      top: calc(var(--header-h) + 1.5rem);
+      min-height: calc(100vh - var(--header-h) - 3.5rem);
     }
 
     .dg-part {
