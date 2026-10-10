@@ -1,3 +1,4 @@
+import { buttonClass } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { TextLink } from "@/components/ui/text-link";
 import { CopyrightYear } from "./copyright-year";
@@ -19,7 +20,15 @@ export function SiteFooter({
             {footer.sourceLabel}
           </TextLink>
         </p>
-        <TextLink href="#top">{footer.backToTop}</TextLink>
+        <a href="#top" className={buttonClass("secondary", "sm")}>
+          {footer.backToTop}
+          <span
+            aria-hidden="true"
+            className="transition-transform duration-300 ease-spring group-hover:-translate-y-0.5"
+          >
+            ↑
+          </span>
+        </a>
       </Container>
     </footer>
   );

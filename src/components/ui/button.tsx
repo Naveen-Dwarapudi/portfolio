@@ -2,9 +2,15 @@ import type { ComponentProps, ReactNode } from "react";
 import { newTabProps } from "./new-tab";
 
 type Variant = "primary" | "secondary";
+type Size = "md" | "sm";
 
 const base =
-  "group inline-flex items-center gap-2 rounded-[10px] border px-5 py-3 text-[15px] font-medium transition-[transform,box-shadow,color,border-color] duration-300 ease-spring";
+  "group inline-flex items-center gap-2 rounded-[10px] border font-medium transition-[transform,box-shadow,color,border-color] duration-300 ease-spring";
+
+const sizes: Record<Size, string> = {
+  md: "px-5 py-3 text-[15px]",
+  sm: "px-3.5 py-2 text-sm",
+};
 
 const variants: Record<Variant, string> = {
   primary:
@@ -24,8 +30,8 @@ function Arrow({ children }: { children: ReactNode }) {
   );
 }
 
-export function buttonClass(variant: Variant = "primary") {
-  return `${base} ${variants[variant]}`;
+export function buttonClass(variant: Variant = "primary", size: Size = "md") {
+  return `${base} ${sizes[size]} ${variants[variant]}`;
 }
 
 export function Button({

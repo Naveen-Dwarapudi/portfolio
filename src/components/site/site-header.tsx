@@ -18,8 +18,8 @@ export function SiteHeader({
   path: string;
 }) {
   return (
-    <header className="relative z-10">
-      <Container className="flex items-center justify-between gap-4 py-5">
+    <header className="sticky top-0 z-30 border-b border-line bg-bg/80 backdrop-blur-md">
+      <Container className="flex items-center justify-between gap-4 py-4">
         {/* Visible "ND." stays in the accessible name (WCAG 2.5.3). */}
         <a
           href={localizedPath(locale, "/")}

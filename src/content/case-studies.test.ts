@@ -116,3 +116,31 @@ describe("case study lookup", () => {
     );
   });
 });
+
+describe("municipal bill payment copy", () => {
+  // The owner joined an existing large-scale platform and built features
+  // (void, refund); the copy must not claim the apps were built from scratch.
+  const study = caseStudies.find((c) => c.slug === "municipal-bill-payment")!;
+  const card = homeContent.experience.engagements.find(
+    (e) => e.slug === "municipal-bill-payment",
+  )!;
+  const texts = [JSON.stringify(study), card.summary, ...card.highlights].join(
+    "\n",
+  );
+
+  it("credits feature work such as void and refund", () => {
+    expect(study.role).toMatch(/void/i);
+    expect(study.role).toMatch(/refund/i);
+    expect(card.highlights.join(" ")).toMatch(/void.*refund/i);
+  });
+
+  it("never claims building the apps or the component set", () => {
+    expect(texts).not.toMatch(/built (both|two)/i);
+    expect(texts).not.toMatch(/developed a reusable/i);
+    expect(texts).not.toMatch(/non-technical staff publish/i);
+  });
+
+  it("describes Strapi as multilingual content management", () => {
+    expect(texts).toMatch(/Strapi[^.]*(languages|multilingual)/i);
+  });
+});

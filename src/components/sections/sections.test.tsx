@@ -1,6 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { homeContent as c } from "@/content/en";
+import { buttonClass } from "@/components/ui/button";
 import { nameWithSuffix } from "@/test/accessible-name";
 import { About } from "./about";
 import { Contact } from "./contact";
@@ -173,6 +174,26 @@ describe("Projects case-study link", () => {
       .map((a) => a.getAttribute("href"));
     expect(hrefs).toContain(`/hi/work/${slug}`);
     expect(hrefs).not.toContain(`/work/${slug}`);
+  });
+});
+
+describe("Projects side-project links", () => {
+  it("renders each side project's live link as a secondary button", () => {
+    render(
+      <Projects
+        projects={c.projects}
+        newTabLabel={c.newTab}
+        techStackLabel={c.techStack}
+        readCaseStudyLabel={c.readCaseStudy}
+        locale="en"
+      />,
+    );
+    for (const s of c.projects.side) {
+      const link = screen.getByRole("link", {
+        name: nameWithSuffix(`Live site: ${s.title}`, c.newTab),
+      });
+      expect(link.className).toBe(buttonClass("secondary"));
+    }
   });
 });
 
