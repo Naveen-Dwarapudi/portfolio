@@ -6,7 +6,12 @@ import type { HomeContent } from "../types";
  * Confidentiality); src/test/confidentiality.test.ts scans this file.
  */
 export const homeContent: HomeContent = {
-  site: { homeLabel: "Naveen Dwarapudi, home", navLabel: "Sections" },
+  site: {
+    homeLabel: "Naveen Dwarapudi, home",
+    navLabel: "Sections",
+    languageLabel: "Language",
+    comingSoon: "Coming soon",
+  },
   nav: [
     { label: "About", href: "/#about" },
     { label: "Experience", href: "/#experience" },
@@ -346,4 +351,11 @@ export const homeContent: HomeContent = {
   newTab: "(opens in a new tab)",
   techStack: "Tech stack",
   readCaseStudy: "Read case study",
+  notFound: {
+    title: "Page not found | Naveen Dwarapudi",
+    heading: "This page doesn't exist.",
+    body: "The link may be broken, or the page may have moved.",
+    home: "Go to the home page",
+    work: "See the case studies",
+  },
 };
