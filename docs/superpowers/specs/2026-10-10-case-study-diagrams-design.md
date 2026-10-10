@@ -28,7 +28,7 @@ client screenshots can't be used.
 2. **Zero client JavaScript.** CSS scroll-driven animations only (`view-timeline`,
    `animation-timeline`).
 3. **Never gates content.** Without scroll-timeline support (e.g. Firefox today), with
-   `prefers-reduced-motion: reduce`, or on narrow screens, the finished diagram and
+   `prefers-reduced-motion: reduce`, or below 1024px, the finished diagram and
    every step are fully visible.
 4. **Accessibility:** each SVG is `role="img"` with an `aria-label` that summarises
    the diagram, and the steps are real ordered-list text. WCAG 2.1 AA in both themes.
@@ -56,7 +56,7 @@ client screenshots can't be used.
   - **Wires** draw: `pathLength="1"` plus `stroke-dashoffset` (`dg-draw`).
   - **Step text** brightens (`dg-lit`) and stays lit, so the reader sees progress.
 - All of this sits inside
-  `@supports (animation-timeline: view()) { @media (prefers-reduced-motion: no-preference) and (min-width: 768px) { … } }`.
+  `@supports (animation-timeline: view()) { @media (prefers-reduced-motion: no-preference) and (min-width: 1024px) { … } }`.
   Outside that block nothing is hidden, and the stage is normal height and not sticky.
 
 ### Content model
@@ -116,8 +116,8 @@ set, and the numbered list otherwise.
 
 ### Responsive behaviour
 
-- **≥ 768px:** two columns (steps | SVG), sticky, scroll-assembled.
-- **< 768px:** no sticky and no assembly. The steps list sits above the finished SVG,
+- **≥ 1024px:** two columns (steps | SVG), sticky, scroll-assembled.
+- **< 1024px:** no sticky and no assembly. The steps list sits above the finished SVG,
   which scales to the container width. A tall sticky stage doesn't fit a phone
   viewport.
 
@@ -231,3 +231,7 @@ and the lifecycle creation → assignment → tracking → escalation → resolu
 | Phones | static diagram under the steps | a sticky 340vh stage doesn't fit a phone viewport |
 | Steps vs Approach list | steps *are* the Approach text on diagram pages | one source; no duplicated content |
 | Labels | in content, typed per diagram kind | phase 5 translations, enforced by `tsc` |
+| Step emphasis | colour `--muted` → `--text`, not opacity | an opacity fade failed AA contrast mid-scroll (the demo used 28%) |
+| Phone legibility | SVG min-width 560px; canvas scrolls inside itself, focusable | at 390px the labels shrank to ~6px |
+| Breakpoint | two-column, sticky stage only from 1024px | at 768–1000px (tablets) two columns shrank labels to ~7.5px |
+| Arrival | stage content top-aligned; step 1 starts as the stage scrolls in | centring left a 200–350px gap and an empty canvas |

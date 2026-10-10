@@ -37,6 +37,7 @@ This Next version differs from older training data. Read the bundled docs in `no
 - Case studies: typed data in `src/content/en/case-studies.ts` (`CaseStudy`), one template (`src/components/case-study/`), route `src/app/work/[slug]`. `src/proxy.ts` returns real 404s for unknown slugs (Cache Components forbids `dynamicParams = false`); keep its slug set in sync by importing `caseStudies`, never a hard-coded list.
 - Don't put scroll-linked reveals on reading content that can be on screen at load: it stays partly transparent until the reader scrolls.
 - Links with visible text keep that text in their accessible name (WCAG 2.5.3): add context with sr-only text, or start `aria-label` with the visible text.
+- Diagrams: typed `diagram` on a `CaseStudy` (kind-specific labels), SVGs in `src/components/diagrams/`, animation only in `globals.css` (`dg-*`). Parts use `dg-part`/`dg-draw` plus `dg-sN`, where N ≤ the study's step count. Never dim text with opacity in scroll animations; animate the colour between AA-safe tokens.
 - jsdom test helpers: `mockMatchMedia([...queries])` from `@/test/setup`; storage and `data-theme` reset after each test.
 
 ## What this is
