@@ -24,6 +24,9 @@ type Copy = HomeContent["contact"]["form"];
 /** How long a submit waits for a Turnstile token before giving up. */
 export const TOKEN_WAIT_MS = 8000;
 
+/** Total wait once Cloudflare shows its interactive challenge (a person is solving it). */
+export const CHALLENGE_WAIT_MS = 120_000;
+
 /** Route Handler (src/app/api/contact/route.ts). */
 export const CONTACT_ENDPOINT = "/api/contact";
 
@@ -93,6 +96,7 @@ function ContactFormRound({
   const tokenWaiters = useRef<((t: string) => void)[]>([]);
   const widget = useRef<{ api: Turnstile; id: string } | null>(null);
   const started = useRef(false);
+  const interactive = useRef(false);
   const inFlight = useRef(false);
 
   const serverErrors =
@@ -107,6 +111,7 @@ function ContactFormRound({
 
   function setToken(value: string) {
     token.current = value;
+    if (value) interactive.current = false;
     if (value) {
       tokenWaiters.current.forEach((resolve) => resolve(value));
       tokenWaiters.current = [];
@@ -127,6 +132,9 @@ function ContactFormRound({
           callback: setToken,
           "expired-callback": () => setToken(""),
           "error-callback": () => setToken(""),
+          "before-interactive-callback": () => {
+            interactive.current = true;
+          },
         });
         widget.current = { api, id };
       })
@@ -141,7 +149,17 @@ function ContactFormRound({
     if (token.current) return Promise.resolve(token.current);
     return new Promise((resolve) => {
       tokenWaiters.current.push(resolve);
-      window.setTimeout(() => resolve(""), TOKEN_WAIT_MS);
+      window.setTimeout(() => {
+        // A visible challenge means a person is still solving it: keep waiting.
+        if (interactive.current) {
+          window.setTimeout(
+            () => resolve(""),
+            CHALLENGE_WAIT_MS - TOKEN_WAIT_MS,
+          );
+        } else {
+          resolve("");
+        }
+      }, TOKEN_WAIT_MS);
     });
   }
 
