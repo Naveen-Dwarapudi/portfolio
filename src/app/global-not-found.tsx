@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { ButtonLink } from "@/components/ui/button";
+import { SkipLink } from "@/components/ui/skip-link";
 import { Container } from "@/components/ui/container";
 import { TextLink } from "@/components/ui/text-link";
 import { getContent } from "@/content";
@@ -36,6 +37,7 @@ export default function GlobalNotFound() {
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="flex min-h-dvh flex-col">
+        <SkipLink />
         <SiteHeader
           site={c.site}
           nav={c.nav}
