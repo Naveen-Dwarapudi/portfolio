@@ -1,7 +1,7 @@
 # Design: Command Palette (Phase 6)
 
 **Date:** 2026-10-11
-**Status:** Draft — awaiting owner review
+**Status:** Approved (owner, 2026-10-11)
 **Parent spec:** `2026-09-19-nextjs-portfolio-design.md` (§8 command palette, §7 budgets)
 **Branch:** `feat/command-palette`
 
@@ -255,7 +255,7 @@ enhancement.
      English" (WCAG 2.5.3).
 2. **Back to top and the side projects' "Live site" become orange.**
    - A new `accent` button variant: an accent border and text on a faint
-     accent tint (about 10%). On hover it fills solid accent with
+     accent tint (8%). On hover it fills solid accent with
      `--on-accent` text.
    - The arrow keeps its nudge (↑ lifts, ↗ shifts).
    - The main project keeps the solid `primary` button, so the hierarchy reads
@@ -276,3 +276,6 @@ enhancement.
 | No-JS | Trigger inert, no layout shift | the palette is an enhancement; content stays reachable |
 | Language menu | `<details>` plus a small close-on-outside/Esc enhancement | keeps the zero-JS baseline; fixes the light-dismiss gap |
 | Side-project and back-to-top buttons | New `accent` variant (orange outline and tint) | owner prefers orange; keeps the main project's solid button dominant |
+| Ranking tiers | Strong matches (≥ 60) hide loose subsequence/typo hits; best match highlighted first | group-first order let weak "Go to" hits outrank "Switch theme" |
+| Accent tint | 8% | 10% measured 4.42:1 for light-theme text over --bg (fails AA); 8% gives 4.55:1 |
+| Palette input focus ring | dropped (caret + highlighted row show position) | the global ring drew clipped inside the card |
