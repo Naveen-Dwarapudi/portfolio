@@ -380,6 +380,16 @@ export const homeContent: HomeContent = {
     backToTop: "Back to top",
   },
   newTab: "(opens in a new tab)",
+  seo: {
+    title: "Naveen Dwarapudi | React.js & React Native Engineer",
+    description:
+      "Portfolio of Bhavani Sankar Naveen Dwarapudi, a React.js and React Native engineer with 4+ years building production web and mobile applications.",
+    siteName: "Naveen Dwarapudi",
+    jobTitle: "React & React Native Engineer",
+    ogAlt: "Bhavani Sankar Naveen Dwarapudi, React & React Native Engineer",
+    caseStudyCardLabel: "Case study · Naveen Dwarapudi",
+    caseStudyOgAlt: "{title}, a case study by Naveen Dwarapudi",
+  },
   palette: {
     buttonLabel: "Search",
     buttonAria: "Search the site",

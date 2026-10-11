@@ -9,6 +9,17 @@ const PUBLISHED = new Set<string>(publishedLocales().map((l) => l.code));
 /** Matches no route, so Next renders the 404 page with a 404 status. */
 const NOT_FOUND = `/${DEFAULT_LOCALE}/__not-found`;
 
+/**
+ * Share images that Next generates beneath [lang] (their URLs keep the /en
+ * prefix): the home card and one card per known case study.
+ */
+export function isShareImage(rest: string): boolean {
+  const match = /^(?:\/work\/([^/]+))?\/opengraph-image(?:\/[^/]+)?$/.exec(
+    rest,
+  );
+  return match !== null && (match[1] === undefined || SLUGS.has(match[1]));
+}
+
 /** Only /work/<known-slug> is servable under /work. */
 function isServable(rest: string): boolean {
   const [first, slug, ...more] = rest.split("/").filter(Boolean);
@@ -28,6 +39,11 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const { locale, rest } = splitLocale(pathname);
 
+  // Serve share images as-is: crawlers fetch them from the og:image URL,
+  // and a redirect there costs a round trip (or a missing preview).
+  if (locale === DEFAULT_LOCALE && isShareImage(rest)) {
+    return NextResponse.next();
+  }
   if (locale === DEFAULT_LOCALE) {
     const url = request.nextUrl.clone();
     url.pathname = rest;
@@ -50,5 +66,8 @@ export const config = {
   // /work/x.pdf skip locale routing: bare 404s without lang, or soft 200s.
   // Add any new public/ or metadata file (robots.txt, sitemap.xml) here.
   // api/ holds Route Handlers (the contact endpoint), which have no locale.
-  matcher: ["/((?!_next/|api/|icon\\.svg$|naveen-dwarapudi-resume\\.pdf$).*)"],
+  // robots.txt, sitemap.xml and apple-icon are root metadata routes (phase 8).
+  matcher: [
+    "/((?!_next/|api/|icon\\.svg$|apple-icon|robots\\.txt$|sitemap\\.xml$|naveen-dwarapudi-resume\\.pdf$).*)",
+  ],
 };

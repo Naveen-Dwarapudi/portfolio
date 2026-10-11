@@ -35,3 +35,20 @@ curl -sL -o /tmp/gmono.ttf "$G/geistmono/GeistMono%5Bwght%5D.ttf"
 If a new weight or character is needed (for example `font-semibold` body text),
 add it to the instance range or `U`, then regenerate. Never swap in the full
 Google font.
+
+## Share-card fonts (`og/`)
+
+`ImageResponse` (satori), which draws the Open Graph cards and the Apple icon at
+build time, can't read woff2 or variable fonts. `og/` holds static TTF subsets
+of the same fonts: Bricolage 800, Geist 400 and Geist 500. They are read only
+during the build and never sent to browsers. Same OFL licences as above.
+
+```bash
+# After the instancer steps above (b.ttf is Bricolage 800):
+/tmp/ft/bin/fonttools varLib.instancer /tmp/geist.ttf wght=400 -o /tmp/g4.ttf
+/tmp/ft/bin/fonttools varLib.instancer /tmp/geist.ttf wght=500 -o /tmp/g5.ttf
+U="$U,U+00B7"
+/tmp/ft/bin/pyftsubset /tmp/b.ttf  --unicodes="$U" --layout-features='kern,liga' --output-file=og/bricolage-grotesque-800-latin.ttf
+/tmp/ft/bin/pyftsubset /tmp/g4.ttf --unicodes="$U" --layout-features='kern,liga' --output-file=og/geist-400-latin.ttf
+/tmp/ft/bin/pyftsubset /tmp/g5.ttf --unicodes="$U" --layout-features='kern,liga' --output-file=og/geist-500-latin.ttf
+```

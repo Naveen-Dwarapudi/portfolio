@@ -1,19 +1,34 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SkipLink } from "@/components/ui/skip-link";
 import { getContent } from "@/content";
 import { localeInfo } from "@/lib/i18n";
 import { localeParams, requirePublishedLocale } from "@/lib/locale-params";
+import { THEME_COLORS } from "@/lib/og/colors";
 import { siteUrl } from "@/lib/site-url";
 import { themeInitScript } from "@/lib/theme";
 import { fontVariables } from "../fonts";
 import "../globals.css";
 
-export const metadata: Metadata = {
-  metadataBase: siteUrl,
-  title: "Naveen Dwarapudi | React.js & React Native Engineer",
-  description:
-    "Portfolio of Bhavani Sankar Naveen Dwarapudi, a React.js and React Native engineer with 4+ years building production web and mobile applications.",
+export async function generateMetadata({
+  params,
+}: LayoutProps<"/[lang]">): Promise<Metadata> {
+  const { seo } = getContent(
+    requirePublishedLocale((await params).lang),
+  ).homeContent;
+  return {
+    metadataBase: siteUrl,
+    title: seo.title,
+    description: seo.description,
+    applicationName: seo.siteName,
+  };
+}
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: THEME_COLORS.dark },
+    { media: "(prefers-color-scheme: light)", color: THEME_COLORS.light },
+  ],
 };
 
 export function generateStaticParams() {
