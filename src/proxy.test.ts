@@ -29,6 +29,7 @@ describe("proxy matcher", () => {
       "/work/pharma-enterprise-portals",
       "/hi",
       "/favicon.ico",
+      "/apple-icon.png",
       "/en/work/x.pdf",
       "/work/pharma-enterprise-portals.x",
     ]) {

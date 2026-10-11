@@ -15,9 +15,10 @@ export function generateStaticParams() {
 export async function generateImageMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  /** A plain object here (docs: generate-image-metadata), not a Promise. */
+  params: { slug: string };
 }) {
-  const study = findCaseStudy(caseStudies, (await params).slug);
+  const study = findCaseStudy(caseStudies, params.slug);
   return [
     {
       id: "card",

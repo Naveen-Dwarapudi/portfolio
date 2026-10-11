@@ -18,15 +18,15 @@ export function homeStructuredData(c: HomeContent, base?: URL): Json {
         name: c.footer.name,
         alternateName: c.seo.siteName,
         jobTitle: c.seo.jobTitle,
-        worksFor: { "@type": "Organization", name: "Aziro Technologies" },
+        worksFor: { "@type": "Organization", name: c.seo.employer },
         url,
         email: `mailto:${c.contact.email}`,
         image: absoluteUrl("/opengraph-image", base),
         sameAs: [c.contact.linkedin.url, c.contact.github.url],
         address: {
           "@type": "PostalAddress",
-          addressRegion: "Andhra Pradesh",
-          addressCountry: "IN",
+          addressRegion: c.seo.region,
+          addressCountry: c.seo.country,
         },
       },
       {

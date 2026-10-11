@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { caseStudies } from "@/content/en/case-studies";
 import { siteUrl } from "@/lib/site-url";
 import { confidentialTermsIn } from "@/test/confidential-terms";
@@ -18,6 +18,17 @@ describe("sitemap.xml", () => {
 
   it("never names a client", () => {
     expect(confidentialTermsIn(JSON.stringify(entries))).toEqual([]);
+  });
+});
+
+describe("sitemap lastModified", () => {
+  afterEach(() => vi.unstubAllEnvs());
+
+  it("uses the build time stamped in next.config.ts", () => {
+    vi.stubEnv("BUILD_TIME", "2026-10-11T00:00:00.000Z");
+    expect(
+      sitemap().every((e) => e.lastModified === "2026-10-11T00:00:00.000Z"),
+    ).toBe(true);
   });
 });
 

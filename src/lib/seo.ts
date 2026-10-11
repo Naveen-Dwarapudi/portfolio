@@ -34,7 +34,7 @@ export function pageMetadata({
       title,
       description,
       siteName,
-      locale: "en",
+      locale: "en_US",
     },
     twitter: { card: "summary_large_image", title, description },
   };

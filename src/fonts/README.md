@@ -47,7 +47,6 @@ during the build and never sent to browsers. Same OFL licences as above.
 # After the instancer steps above (b.ttf is Bricolage 800):
 /tmp/ft/bin/fonttools varLib.instancer /tmp/geist.ttf wght=400 -o /tmp/g4.ttf
 /tmp/ft/bin/fonttools varLib.instancer /tmp/geist.ttf wght=500 -o /tmp/g5.ttf
-U="$U,U+00B7"
 /tmp/ft/bin/pyftsubset /tmp/b.ttf  --unicodes="$U" --layout-features='kern,liga' --output-file=og/bricolage-grotesque-800-latin.ttf
 /tmp/ft/bin/pyftsubset /tmp/g4.ttf --unicodes="$U" --layout-features='kern,liga' --output-file=og/geist-400-latin.ttf
 /tmp/ft/bin/pyftsubset /tmp/g5.ttf --unicodes="$U" --layout-features='kern,liga' --output-file=og/geist-500-latin.ttf

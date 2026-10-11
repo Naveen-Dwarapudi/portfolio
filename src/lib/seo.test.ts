@@ -29,7 +29,7 @@ describe("pageMetadata", () => {
       title: "T",
       description: "D",
       siteName: "S",
-      locale: "en",
+      locale: "en_US",
     });
     expect(meta.twitter).toEqual({
       card: "summary_large_image",
