@@ -111,6 +111,26 @@ export type HomeContent = {
     github: { label: string; url: ExternalUrl };
     location: string;
     copy: { idle: string; done: string; announced: string; failed: string };
+    /** Contact form (phase 7). `{count}`, `{max}` and `{email}` are filled in. */
+    form: {
+      heading: string;
+      labels: { name: string; email: string; message: string };
+      honeypotLabel: string;
+      note: string;
+      counter: string;
+      submit: string;
+      sending: string;
+      fieldErrors: {
+        nameRequired: string;
+        nameTooLong: string;
+        emailInvalid: string;
+        messageTooShort: string;
+        messageTooLong: string;
+      };
+      formErrors: { tooMany: string; verification: string; sendFailed: string };
+      success: { heading: string; body: string; again: string };
+      noscript: string;
+    };
   };
   footer: {
     name: string;
