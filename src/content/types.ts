@@ -140,6 +140,16 @@ export type HomeContent = {
     backToTop: string;
   };
   newTab: string;
+  /** Search and sharing metadata (phase 8). `{title}` is filled in. */
+  seo: {
+    title: string;
+    description: string;
+    siteName: string;
+    jobTitle: string;
+    ogAlt: string;
+    caseStudyCardLabel: string;
+    caseStudyOgAlt: string;
+  };
   /** Command palette (Ctrl/⌘+K). `{count}` and `{query}` are filled in. */
   palette: {
     buttonLabel: string;
