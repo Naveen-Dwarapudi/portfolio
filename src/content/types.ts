@@ -120,6 +120,27 @@ export type HomeContent = {
     backToTop: string;
   };
   newTab: string;
+  /** Command palette (Ctrl/⌘+K). `{count}` and `{query}` are filled in. */
+  palette: {
+    buttonLabel: string;
+    /** Accessible name; starts with buttonLabel (WCAG 2.5.3). */
+    buttonAria: string;
+    placeholder: string;
+    dialogLabel: string;
+    groups: { goto: string; actions: string; language: string };
+    copyEmail: string;
+    downloadResume: string;
+    openGithub: string;
+    openLinkedin: string;
+    switchTheme: { light: string; dark: string };
+    results: { one: string; other: string };
+    noResults: string;
+    emailCopied: string;
+    copyFailed: string;
+    /** Screen-reader note on the current language's row. */
+    current: string;
+    hints: { move: string; select: string; close: string };
+  };
   techStack: string;
   readCaseStudy: string;
   notFound: {
