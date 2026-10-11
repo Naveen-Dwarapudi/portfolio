@@ -8,6 +8,7 @@ import {
   type Command,
   type PaletteInput,
 } from "@/lib/palette/commands";
+import { composing } from "@/lib/palette/keys";
 import { rankCommands } from "@/lib/palette/rank";
 import { currentTheme, switchTheme } from "@/lib/theme-switch";
 
@@ -54,6 +55,9 @@ export default function CommandPalette({
   const [active, setActive] = useState(0);
   const [status, setStatus] = useState("");
   const [theme, setTheme] = useState(() => currentTheme());
+  // The copy action's delayed close; cleared on any close or reopen so it
+  // can't shut a palette opened again within the delay.
+  const closeTimer = useRef<number | undefined>(undefined);
 
   const commands = useMemo(() => buildCommands(input, theme), [input, theme]);
   const ranked = useMemo(
@@ -68,6 +72,7 @@ export default function CommandPalette({
     const dialog = dialogRef.current;
     if (!dialog) return;
     if (open && !dialog.open) {
+      window.clearTimeout(closeTimer.current);
       setTheme(currentTheme());
       dialog.showModal();
       inputRef.current?.focus();
@@ -93,6 +98,7 @@ export default function CommandPalette({
   // state update would land, so keys typed right after reopening would join
   // the old query.
   function onDialogClose() {
+    window.clearTimeout(closeTimer.current);
     setQuery("");
     setActive(0);
     setStatus("");
@@ -133,7 +139,7 @@ export default function CommandPalette({
       case "copy":
         if (await copyText(run.text)) {
           setStatus(copy.emailCopied);
-          window.setTimeout(close, COPY_CLOSE_DELAY);
+          closeTimer.current = window.setTimeout(close, COPY_CLOSE_DELAY);
         } else {
           setStatus(copy.copyFailed);
         }
@@ -141,7 +147,7 @@ export default function CommandPalette({
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.nativeEvent.isComposing) return;
+    if (composing(event.nativeEvent)) return;
     const last = results.length - 1;
     const moves: Record<string, () => number> = {
       ArrowDown: () => (active >= last ? 0 : active + 1),

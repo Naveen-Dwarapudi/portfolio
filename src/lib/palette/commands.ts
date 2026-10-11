@@ -110,7 +110,7 @@ export function buildCommands(input: PaletteInput, theme: Theme): Command[] {
       id: `language:${l.code}`,
       group: "language",
       label: l.nativeName,
-      keywords: [l.code, "language"],
+      keywords: [l.code, l.englishName, "language"],
       lang: l.htmlLang,
       current,
       disabled: !current && !l.published,

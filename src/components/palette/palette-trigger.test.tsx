@@ -45,9 +45,13 @@ describe("PaletteTrigger", () => {
     await waitFor(() => expect(button).toHaveFocus());
   });
 
-  it.each([["Control"], ["Meta"]])(
-    "%s+K opens it and a second press closes it",
-    async (modifier) => {
+  it.each([
+    ["Control", "elsewhere", "Win32"],
+    ["Meta", "on Apple devices", "MacIntel"],
+  ])(
+    "%s+K opens it %s and a second press closes it",
+    async (modifier, _, platform) => {
+      vi.stubGlobal("navigator", { ...navigator, platform });
       const user = userEvent.setup();
       render(<PaletteTrigger input={input} />);
       await user.keyboard(`{${modifier}>}k{/${modifier}}`);
@@ -56,6 +60,14 @@ describe("PaletteTrigger", () => {
       await waitFor(() => expect(dialog()).not.toHaveAttribute("open"));
     },
   );
+
+  it("leaves Ctrl+K alone on Apple devices (text editing)", async () => {
+    vi.stubGlobal("navigator", { ...navigator, platform: "MacIntel" });
+    const user = userEvent.setup();
+    render(<PaletteTrigger input={input} />);
+    await user.keyboard("{Control>}k{/Control}");
+    expect(dialog()).toBeNull();
+  });
 
   it("shows Ctrl K by default and ⌘K on Apple devices", () => {
     const { unmount } = render(<PaletteTrigger input={input} />);

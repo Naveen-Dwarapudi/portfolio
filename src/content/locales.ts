@@ -5,15 +5,35 @@
  * docs/superpowers/specs/2026-10-10-i18n-design.md §6.
  */
 export const LOCALES = [
-  { code: "en", nativeName: "English", htmlLang: "en", published: true },
-  { code: "hi", nativeName: "हिन्दी", htmlLang: "hi", published: false },
-  { code: "te", nativeName: "తెలుగు", htmlLang: "te", published: false },
+  {
+    code: "en",
+    nativeName: "English",
+    englishName: "English",
+    htmlLang: "en",
+    published: true,
+  },
+  {
+    code: "hi",
+    nativeName: "हिन्दी",
+    englishName: "Hindi",
+    htmlLang: "hi",
+    published: false,
+  },
+  {
+    code: "te",
+    nativeName: "తెలుగు",
+    englishName: "Telugu",
+    htmlLang: "te",
+    published: false,
+  },
 ] as const;
 
 export type Locale = (typeof LOCALES)[number]["code"];
 export type LocaleInfo = {
   code: Locale;
   nativeName: string;
+  /** For search (command palette): "hindi" finds हिन्दी. */
+  englishName: string;
   htmlLang: string;
   published: boolean;
 };

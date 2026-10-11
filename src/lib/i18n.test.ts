@@ -72,9 +72,27 @@ describe("publishedLocales / localeInfo", () => {
 
   it("filters any list it is given", () => {
     const list = [
-      { code: "en", nativeName: "English", htmlLang: "en", published: true },
-      { code: "hi", nativeName: "हिन्दी", htmlLang: "hi", published: true },
-      { code: "te", nativeName: "తెలుగు", htmlLang: "te", published: false },
+      {
+        code: "en",
+        nativeName: "English",
+        englishName: "English",
+        htmlLang: "en",
+        published: true,
+      },
+      {
+        code: "hi",
+        nativeName: "हिन्दी",
+        englishName: "Hindi",
+        htmlLang: "hi",
+        published: true,
+      },
+      {
+        code: "te",
+        nativeName: "తెలుగు",
+        englishName: "Telugu",
+        htmlLang: "te",
+        published: false,
+      },
     ] as const;
     expect(publishedLocales(list).map((l) => l.code)).toEqual(["en", "hi"]);
   });

@@ -10,12 +10,12 @@ async function openWithShortcut(page: Page) {
   // The shortcut listener attaches on hydration; a real visitor is never
   // faster than that, but a test can be.
   await page.waitForLoadState("networkidle");
-  await page.keyboard.press("Control+k");
+  await page.keyboard.press("ControlOrMeta+k");
   await expect(palette(page)).toBeVisible();
   await expect(search(page)).toBeFocused();
 }
 
-test("Ctrl+K, type, Enter navigates to a case study", async ({ page }) => {
+test("Ctrl/⌘+K, type, Enter navigates to a case study", async ({ page }) => {
   await page.goto("/");
   await openWithShortcut(page);
   await page.keyboard.type("wareh");
