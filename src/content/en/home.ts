@@ -340,6 +340,37 @@ export const homeContent: HomeContent = {
       announced: "Email address copied",
       failed: "Copy failed — the address is dbsnaveen@gmail.com",
     },
+    form: {
+      heading: "Send a message",
+      labels: { name: "Name", email: "Email", message: "Message" },
+      honeypotLabel: "Leave this field empty",
+      note: "Your message goes straight to my inbox; nothing is stored.",
+      counter: "{count} / {max}",
+      submit: "Send message",
+      sending: "Sending…",
+      fieldErrors: {
+        nameRequired: "Please enter your name.",
+        nameTooLong: "Please keep your name under 100 characters.",
+        emailInvalid: "Please enter a valid email address.",
+        messageTooShort: "Please write at least 10 characters.",
+        messageTooLong: "Please keep your message under 2,000 characters.",
+      },
+      formErrors: {
+        tooMany:
+          "You've sent a few messages already. Please try again in a few minutes, or email me directly:",
+        verification:
+          "We couldn't confirm you're human. Please try again, or email me directly:",
+        sendFailed:
+          "Something went wrong sending your message. Please try again, or email me directly:",
+      },
+      success: {
+        heading: "Thanks, your message is on its way.",
+        body: "I'll reply as soon as I can.",
+        again: "Send another message",
+      },
+      noscript:
+        "The form needs JavaScript. You can email me directly at {email}.",
+    },
   },
   footer: {
     name: "Bhavani Sankar Naveen Dwarapudi",

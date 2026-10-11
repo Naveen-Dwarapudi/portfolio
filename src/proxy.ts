@@ -49,5 +49,6 @@ export const config = {
   // RESUME_PATH. A blanket "has a dot" exclusion let /favicon.ico or
   // /work/x.pdf skip locale routing: bare 404s without lang, or soft 200s.
   // Add any new public/ or metadata file (robots.txt, sitemap.xml) here.
-  matcher: ["/((?!_next/|icon\\.svg$|naveen-dwarapudi-resume\\.pdf$).*)"],
+  // api/ holds Route Handlers (the contact endpoint), which have no locale.
+  matcher: ["/((?!_next/|api/|icon\\.svg$|naveen-dwarapudi-resume\\.pdf$).*)"],
 };
