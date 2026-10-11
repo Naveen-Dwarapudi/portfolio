@@ -1,9 +1,11 @@
+import { DismissibleDetails } from "@/components/site/dismissible-details";
 import type { Locale, LocaleInfo } from "@/content/locales";
 import { localizedPath } from "@/lib/i18n";
 
 /**
- * Native <details> disclosure (zero JS). Current language is marked; published
- * languages link to the same page; unpublished ones show "Coming soon".
+ * Native <details> disclosure; a small client enhancement closes it on an
+ * outside press or Esc. Current language is marked; published languages link
+ * to the same page; unpublished ones show "Coming soon".
  */
 export function LocaleSwitcher({
   current,
@@ -19,9 +21,9 @@ export function LocaleSwitcher({
 }) {
   const active = locales.find((l) => l.code === current);
   return (
-    <details className="group relative">
+    <DismissibleDetails className="group relative">
       <summary
-        aria-label={`${labels.languageLabel}: ${active?.nativeName ?? current}`}
+        aria-label={`${active?.nativeName ?? current}, ${labels.languageLabel}`}
         className="flex h-10 cursor-pointer list-none items-center gap-2 rounded-lg border border-line px-3 text-sm text-muted transition-colors hover:text-text [&::-webkit-details-marker]:hidden"
       >
         <svg
@@ -74,6 +76,6 @@ export function LocaleSwitcher({
           </li>
         ))}
       </ul>
-    </details>
+    </DismissibleDetails>
   );
 }

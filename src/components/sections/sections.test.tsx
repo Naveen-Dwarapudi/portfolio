@@ -178,7 +178,7 @@ describe("Projects case-study link", () => {
 });
 
 describe("Projects side-project links", () => {
-  it("renders each side project's live link as a secondary button", () => {
+  it("renders each side project's live link as an accent button", () => {
     render(
       <Projects
         projects={c.projects}
@@ -192,7 +192,7 @@ describe("Projects side-project links", () => {
       const link = screen.getByRole("link", {
         name: nameWithSuffix(`Live site: ${s.title}`, c.newTab),
       });
-      expect(link.className).toBe(buttonClass("secondary"));
+      expect(link.className).toBe(buttonClass("accent"));
     }
   });
 });

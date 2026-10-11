@@ -1,11 +1,11 @@
 import type { ComponentProps, ReactNode } from "react";
 import { newTabProps } from "./new-tab";
 
-type Variant = "primary" | "secondary";
+type Variant = "primary" | "secondary" | "accent";
 type Size = "md" | "sm";
 
 const base =
-  "group inline-flex items-center gap-2 rounded-[10px] border font-medium transition-[transform,box-shadow,color,border-color] duration-300 ease-spring";
+  "group inline-flex items-center gap-2 rounded-[10px] border font-medium transition-[transform,box-shadow,color,background-color,border-color] duration-300 ease-spring";
 
 const sizes: Record<Size, string> = {
   md: "px-5 py-3 text-[15px]",
@@ -17,6 +17,11 @@ const variants: Record<Variant, string> = {
     "border-transparent bg-accent text-on-accent shadow-[0_8px_30px_-10px_var(--accent)]",
   secondary:
     "border-line bg-surface/70 text-text backdrop-blur-sm hover:border-line-strong",
+  // Orange outline on a faint tint; fills solid on hover. Sits between
+  // primary and secondary in emphasis. 8% is the strongest tint that keeps
+  // light-theme text at AA (src/test/accent-contrast.test.ts reads it here).
+  accent:
+    "border-accent/50 bg-accent/8 text-accent hover:border-accent hover:bg-accent hover:text-on-accent",
 };
 
 function Arrow({ children }: { children: ReactNode }) {

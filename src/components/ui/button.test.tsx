@@ -40,6 +40,26 @@ describe("ButtonLink", () => {
   });
 });
 
+describe("ButtonLink accent variant", () => {
+  it("draws an accent outline and tint that fills on hover", () => {
+    render(
+      <ButtonLink href="#c" variant="accent">
+        Accent
+      </ButtonLink>,
+    );
+    const cls = screen.getByRole("link", { name: "Accent" }).className;
+    for (const c of [
+      "border-accent/50",
+      "bg-accent/8",
+      "text-accent",
+      "hover:bg-accent",
+      "hover:text-on-accent",
+    ]) {
+      expect(cls).toContain(c);
+    }
+  });
+});
+
 describe("Button", () => {
   it("defaults to type=button so it never submits a form by accident", () => {
     render(<Button>Go</Button>);
