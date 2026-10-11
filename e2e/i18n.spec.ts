@@ -78,7 +78,7 @@ test("the language switcher opens from the keyboard and shows coming-soon langua
 }) => {
   await page.goto("/");
   const summary = page.locator("header details summary");
-  await expect(summary).toHaveAttribute("aria-label", "Language: English");
+  await expect(summary).toHaveAttribute("aria-label", "English, Language");
   await summary.focus();
   await page.keyboard.press("Enter");
   const menu = page.locator("header details ul");
@@ -87,6 +87,23 @@ test("the language switcher opens from the keyboard and shows coming-soon langua
   await expect(menu.getByRole("link")).toHaveCount(0);
   await page.keyboard.press("Enter");
   await expect(menu).toBeHidden();
+});
+
+test("the language menu closes on an outside click or Esc", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const summary = page.locator("header details summary");
+  const menu = page.locator("header details ul");
+  await summary.click();
+  await expect(menu).toBeVisible();
+  await page.locator("main h1").click();
+  await expect(menu).toBeHidden();
+  await summary.click();
+  await expect(menu).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(menu).toBeHidden();
+  await expect(summary).toBeFocused();
 });
 
 test("the switcher is available on phones too", async ({ page }) => {

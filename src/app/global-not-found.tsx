@@ -6,12 +6,14 @@ import { Container } from "@/components/ui/container";
 import { TextLink } from "@/components/ui/text-link";
 import { getContent } from "@/content";
 import { DEFAULT_LOCALE } from "@/content/locales";
+import { paletteData } from "@/lib/palette/data";
 import { siteUrl } from "@/lib/site-url";
 import { themeInitScript } from "@/lib/theme";
 import { fontVariables } from "./fonts";
 import "./globals.css";
 
-const { homeContent: c } = getContent(DEFAULT_LOCALE);
+const content = getContent(DEFAULT_LOCALE);
+const { homeContent: c } = content;
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
@@ -39,6 +41,7 @@ export default function GlobalNotFound() {
           nav={c.nav}
           locale={DEFAULT_LOCALE}
           path="/"
+          palette={paletteData(content)}
         />
         <main id="main" className="flex flex-1 items-center">
           <Container className="py-24">

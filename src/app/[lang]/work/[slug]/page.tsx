@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site/site-header";
 import { getContent } from "@/content";
 import { adjacentCaseStudies, findCaseStudy } from "@/content/case-studies";
 import { requirePublishedLocale } from "@/lib/locale-params";
+import { paletteData } from "@/lib/palette/data";
 
 /**
  * All case studies are prerendered per published locale (the parent [lang]
@@ -35,7 +36,8 @@ export default async function CaseStudyPage({
 }: PageProps<"/[lang]/work/[slug]">) {
   const { lang, slug } = await params;
   const locale = requirePublishedLocale(lang);
-  const { homeContent, caseStudies, caseStudyUi } = getContent(locale);
+  const content = getContent(locale);
+  const { homeContent, caseStudies, caseStudyUi } = content;
   const study = findCaseStudy(caseStudies, slug);
   const adjacent = adjacentCaseStudies(caseStudies, slug);
   if (!study || !adjacent) notFound();
@@ -47,6 +49,7 @@ export default async function CaseStudyPage({
         nav={homeContent.nav}
         locale={locale}
         path={`/work/${slug}`}
+        palette={paletteData(content)}
       />
       <main id="main" className="flex-1">
         <CaseStudyArticle

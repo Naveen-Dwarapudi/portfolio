@@ -17,7 +17,7 @@ describe("LocaleSwitcher", () => {
     );
     expect(container.querySelector("summary")).toHaveAttribute(
       "aria-label",
-      "Language: English",
+      "English, Language",
     );
   });
 

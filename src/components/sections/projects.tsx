@@ -122,7 +122,7 @@ export function Projects({
               </ul>
               <div className="mt-5">
                 <ButtonLink
-                  variant="secondary"
+                  variant="accent"
                   href={s.liveUrl}
                   arrow="↗"
                   newTabLabel={newTabLabel}

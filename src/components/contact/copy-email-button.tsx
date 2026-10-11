@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { buttonClass } from "@/components/ui/button";
+import { copyText } from "@/lib/clipboard";
 
 type Labels = { idle: string; done: string; announced: string; failed: string };
 type Status = "idle" | "done" | "failed";
@@ -23,12 +24,7 @@ export function CopyEmailButton({
   }, [status]);
 
   async function copy() {
-    try {
-      await navigator.clipboard.writeText(email);
-      setStatus("done");
-    } catch {
-      setStatus("failed");
-    }
+    setStatus((await copyText(email)) ? "done" : "failed");
   }
 
   return (

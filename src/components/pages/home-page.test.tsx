@@ -1,10 +1,18 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { getContent } from "@/content";
 import { homeContent } from "@/content/en";
+import { paletteData } from "@/lib/palette/data";
 import { HomePage } from "./home-page";
 
 function renderHome() {
-  return render(<HomePage content={homeContent} locale="en" />);
+  return render(
+    <HomePage
+      content={homeContent}
+      locale="en"
+      palette={paletteData(getContent("en"))}
+    />,
+  );
 }
 
 describe("HomePage", () => {

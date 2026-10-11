@@ -40,6 +40,8 @@ This Next version differs from older training data. Read the bundled docs in `no
 - Diagrams: typed `diagram` on a `CaseStudy` (kind-specific labels), SVGs in `src/components/diagrams/`, animation only in `globals.css` (`dg-*`). Parts use `dg-part`/`dg-draw` plus `dg-sN`, where N ≤ the study's step count. Never dim text with opacity in scroll animations; animate the colour between AA-safe tokens.
 - The header is sticky. `--header-h` in `globals.css` drives `scroll-padding-top` and sticky offsets (the diagram stage); update it if the header's height changes.
 - The site header is rendered by each page (it needs the page's path for the language switcher), not by the layout. Every 404 is `src/app/global-not-found.tsx`.
+- Command palette: `src/components/palette/` (the trigger is always loaded; `command-palette.tsx` is lazy). Commands are data from `src/lib/palette/commands.ts`, ranked by `rank.ts`; pages pass `paletteData(getContent(locale))` to `SiteHeader`. Theme changes go through `src/lib/theme-switch.ts`, clipboard writes through `src/lib/clipboard.ts`.
+- Buttons: `primary` (solid) > `accent` (orange outline on an 8% tint, AA-checked by `src/test/accent-contrast.test.ts`) > `secondary`.
 - jsdom test helpers: `mockMatchMedia([...queries])` from `@/test/setup`; storage and `data-theme` reset after each test.
 
 ## What this is
@@ -48,7 +50,7 @@ A Next.js personal portfolio for a React / React Native engineer, aimed at senio
 
 ## Planned stack (see spec §3)
 
-Next.js App Router · TypeScript `strict` · Tailwind CSS v4 (CSS-first `@theme`, **no `tailwind.config.js`**) · Motion · no i18n library (Next's [lang] + Proxy pattern) · cmdk · Server Actions + Zod + react-hook-form · Resend · Vitest + RTL · Playwright + axe-core · Lighthouse CI · lucide-react.
+Next.js App Router · TypeScript `strict` · Tailwind CSS v4 (CSS-first `@theme`, **no `tailwind.config.js`**) · Motion · no i18n library (Next's [lang] + Proxy pattern) · hand-built command palette (native <dialog>) · Server Actions + Zod + react-hook-form · Resend · Vitest + RTL · Playwright + axe-core · Lighthouse CI · lucide-react.
 
 Resolve version numbers against the registry at implementation time. They are not pinned in the spec.
 

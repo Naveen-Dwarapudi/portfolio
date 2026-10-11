@@ -20,7 +20,7 @@ export function SiteFooter({
             {footer.sourceLabel}
           </TextLink>
         </p>
-        <a href="#top" className={buttonClass("secondary", "sm")}>
+        <a href="#top" className={buttonClass("accent", "sm")}>
           {footer.backToTop}
           <span
             aria-hidden="true"

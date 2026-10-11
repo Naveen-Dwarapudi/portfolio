@@ -1,21 +1,25 @@
+import { PaletteTrigger } from "@/components/palette/palette-trigger";
 import { LocaleSwitcher } from "@/components/site/locale-switcher";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Container } from "@/components/ui/container";
 import { LOCALES, type Locale } from "@/content/locales";
 import type { HomeContent } from "@/content/types";
 import { localizedPath } from "@/lib/i18n";
+import type { PaletteData } from "@/lib/palette/commands";
 
 export function SiteHeader({
   site,
   nav,
   locale,
   path,
+  palette,
 }: {
   site: HomeContent["site"];
   nav: HomeContent["nav"];
   locale: Locale;
   /** Locale-free path of the current page, for the language switcher. */
   path: string;
+  palette: PaletteData;
 }) {
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-bg/80 backdrop-blur-md">
@@ -43,6 +47,9 @@ export function SiteHeader({
               ))}
             </ul>
           </nav>
+          <PaletteTrigger
+            input={{ ...palette, locale, path, locales: LOCALES }}
+          />
           <LocaleSwitcher
             current={locale}
             path={path}

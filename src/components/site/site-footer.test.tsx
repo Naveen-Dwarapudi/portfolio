@@ -8,11 +8,11 @@ import { SiteFooter } from "./site-footer";
 vi.mock("./copyright-year", () => ({ CopyrightYear: () => "2026" }));
 
 describe("SiteFooter", () => {
-  it("renders back to top as a small secondary button with an up arrow", () => {
+  it("renders back to top as a small accent button with an up arrow", () => {
     render(<SiteFooter footer={c.footer} newTabLabel={c.newTab} />);
     const top = screen.getByRole("link", { name: c.footer.backToTop });
     expect(top).toHaveAttribute("href", "#top");
-    expect(top.className).toBe(buttonClass("secondary", "sm"));
+    expect(top.className).toBe(buttonClass("accent", "sm"));
     expect(top.querySelector('[aria-hidden="true"]')).toHaveTextContent("↑");
   });
 });
