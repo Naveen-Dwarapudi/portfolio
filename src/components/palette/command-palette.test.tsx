@@ -1,4 +1,4 @@
-import { act, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { getContent } from "@/content";
@@ -169,5 +169,35 @@ describe("CommandPalette", () => {
     expect(within(hindi).getByText(homeContent.site.comingSoon)).toBeVisible();
     await user.keyboard("{Enter}");
     expect(onClosed).not.toHaveBeenCalled();
+  });
+
+  it("ignores the Enter that ends an IME composition (Safari keyCode 229)", () => {
+    const assign = vi.fn();
+    vi.stubGlobal("location", { ...window.location, assign });
+    const { combobox } = setup();
+    fireEvent.change(combobox, { target: { value: "about" } });
+    fireEvent.keyDown(combobox, { key: "Enter", keyCode: 229 });
+    expect(assign).not.toHaveBeenCalled();
+    vi.unstubAllGlobals();
+  });
+
+  it("a palette reopened soon after Copy email isn't closed by the old timer", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    vi.spyOn(navigator.clipboard, "writeText").mockResolvedValue();
+    const onClosed = vi.fn();
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const { rerender } = render(
+      <CommandPalette input={input} open onClosed={onClosed} />,
+    );
+    await user.keyboard("copy email{Enter}");
+    await screen.findByText(copy.emailCopied);
+    const dialog = screen.getByRole("dialog") as HTMLDialogElement;
+    act(() => dialog.close()); // Esc before the delayed close
+    rerender(<CommandPalette input={input} open={false} onClosed={onClosed} />);
+    rerender(<CommandPalette input={input} open onClosed={onClosed} />);
+    expect(dialog).toHaveAttribute("open");
+    await act(() => vi.advanceTimersByTimeAsync(COPY_CLOSE_DELAY));
+    expect(dialog).toHaveAttribute("open");
+    vi.useRealTimers();
   });
 });

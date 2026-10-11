@@ -149,6 +149,11 @@ export type HomeContent = {
     ogAlt: string;
     caseStudyCardLabel: string;
     caseStudyOgAlt: string;
+    /** Person details for JSON-LD (schema.org). */
+    employer: string;
+    region: string;
+    /** ISO 3166-1 alpha-2, e.g. "IN". */
+    country: string;
   };
   /** Command palette (Ctrl/⌘+K). `{count}` and `{query}` are filled in. */
   palette: {

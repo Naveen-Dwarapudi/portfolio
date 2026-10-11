@@ -4,6 +4,9 @@ import { RESUME_PATH } from "./src/lib/resume";
 const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
+  // Stamped once per build for the sitemap's lastModified (never computed
+  // during render, which Cache Components forbids).
+  env: { BUILD_TIME: new Date().toISOString() },
   // The root layout lives under app/[lang], so URLs matching no route need a
   // global 404 (docs: file-conventions/not-found.md, global-not-found).
   experimental: { globalNotFound: true },

@@ -221,3 +221,4 @@ in the HTML answers 200 with `content-type: image/png` and no 3xx.
 | Portrait audit | No change: 5.5 KB AVIF at the right size | nothing to gain; LCP is dominated by other work |
 | Case-study cards (final) | Rendered on first request, then cached by Next/Vercel; the home card and Apple icon are prerendered | `generateImageMetadata` (needed for the per-title alt text) prevents prerendering; first render is about 40 ms; final review I-1 |
 | CreativeWork author | Named inline (`@type` Person, `name`, `url`) as well as the `@id` | Google doesn't resolve an `@id` defined on another page |
+| Card dimensions (final) | 10px accent bar; home portrait 360px (28px radius), case-study portrait 220px round; type 70/32/26 (home) and 24/64/26 (case study) | tuned for legibility at LinkedIn's preview size; recorded in phase 9 |

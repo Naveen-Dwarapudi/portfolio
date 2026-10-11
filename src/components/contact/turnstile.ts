@@ -9,6 +9,8 @@ export type Turnstile = {
       size?: "normal" | "flexible" | "compact";
       callback?: (token: string) => void;
       "expired-callback"?: () => void;
+      /** Cloudflare is about to show its interactive challenge. */
+      "before-interactive-callback"?: () => void;
       "error-callback"?: () => void;
     },
   ): string;
@@ -37,14 +39,16 @@ export function loadTurnstile(): Promise<Turnstile> {
     const script = document.createElement("script");
     script.src = TURNSTILE_SRC;
     script.async = true;
-    script.onload = () =>
-      window.turnstile
-        ? resolve(window.turnstile)
-        : reject(new Error("turnstile missing"));
-    script.onerror = () => {
+    // On any failure, forget this attempt and drop the tag, so a later
+    // focus retries cleanly (e.g. after an ad blocker served a stub).
+    const fail = (reason: string) => {
       loading = null;
-      reject(new Error("turnstile failed to load"));
+      script.remove();
+      reject(new Error(reason));
     };
+    script.onload = () =>
+      window.turnstile ? resolve(window.turnstile) : fail("turnstile missing");
+    script.onerror = () => fail("turnstile failed to load");
     document.head.append(script);
   });
   return loading;

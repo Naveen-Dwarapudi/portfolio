@@ -68,6 +68,6 @@ export const config = {
   // api/ holds Route Handlers (the contact endpoint), which have no locale.
   // robots.txt, sitemap.xml and apple-icon are root metadata routes (phase 8).
   matcher: [
-    "/((?!_next/|api/|icon\\.svg$|apple-icon|robots\\.txt$|sitemap\\.xml$|naveen-dwarapudi-resume\\.pdf$).*)",
+    "/((?!_next/|api/|icon\\.svg$|apple-icon$|robots\\.txt$|sitemap\\.xml$|naveen-dwarapudi-resume\\.pdf$).*)",
   ],
 };

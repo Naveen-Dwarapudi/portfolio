@@ -8,7 +8,11 @@ import { HONEYPOT_FIELD, TURNSTILE_FIELD, type ContactState } from "./types";
 export type ContactDeps = {
   env: ContactEnv;
   ip: string;
-  limiter: { hit(key: string): { ok: boolean } };
+  limiter: {
+    hit(key: string): { ok: boolean };
+    /** Gives a slot back (server-side failures shouldn't lock people out). */
+    refund?(key: string): void;
+  };
   fetch?: typeof fetch;
   log?: (level: "info" | "warn", outcome: string) => void;
 };
@@ -50,11 +54,17 @@ export async function handleContact(
     return { status: "error", formError: "tooMany", values };
   }
 
+  if (!env.dryRun && env.turnstileSecret === undefined) {
+    // An owner mistake, not a bot: say so in the logs, and don't charge the
+    // visitor a slot for it.
+    log("warn", "misconfigured: TURNSTILE_SECRET_KEY");
+    deps.limiter.refund?.(deps.ip);
+    return { status: "error", formError: "verification", values };
+  }
   const token = field(form, TURNSTILE_FIELD);
   const human = env.dryRun
     ? token !== "" && token !== "fail"
-    : env.turnstileSecret !== undefined &&
-      (await verifyTurnstile(token, deps.ip, env.turnstileSecret, deps.fetch));
+    : await verifyTurnstile(token, deps.ip, env.turnstileSecret!, deps.fetch);
   if (!human) {
     log("warn", "verification-failed");
     return { status: "error", formError: "verification", values };
@@ -64,15 +74,20 @@ export async function handleContact(
     log("info", "dry-run: email not sent");
     return { status: "success" };
   }
-  const sent =
-    env.resendApiKey !== undefined &&
-    (await sendEmail(
-      parsed.data,
-      { apiKey: env.resendApiKey, to: env.toEmail },
-      deps.fetch,
-    ));
+  if (env.resendApiKey === undefined) {
+    log("warn", "misconfigured: RESEND_API_KEY");
+    deps.limiter.refund?.(deps.ip);
+    return { status: "error", formError: "sendFailed", values };
+  }
+  const sent = await sendEmail(
+    parsed.data,
+    { apiKey: env.resendApiKey, to: env.toEmail },
+    deps.fetch,
+  );
   if (!sent) {
     log("warn", "send-failed");
+    // Our fault, not the visitor's: give the slot back.
+    deps.limiter.refund?.(deps.ip);
     return { status: "error", formError: "sendFailed", values };
   }
   log("info", "sent");

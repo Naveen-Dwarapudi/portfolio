@@ -326,7 +326,7 @@ export const homeContent: HomeContent = {
   contact: {
     label: "Contact",
     heading: "Let's talk.",
-    line: "The quickest way to reach me is email.",
+    line: "Email me directly, or send a message with the form.",
     email: "dbsnaveen@gmail.com",
     linkedin: {
       label: "LinkedIn",
@@ -389,6 +389,9 @@ export const homeContent: HomeContent = {
     ogAlt: "Bhavani Sankar Naveen Dwarapudi, React & React Native Engineer",
     caseStudyCardLabel: "Case study · Naveen Dwarapudi",
     caseStudyOgAlt: "{title}, a case study by Naveen Dwarapudi",
+    employer: "Aziro Technologies",
+    region: "Andhra Pradesh",
+    country: "IN",
   },
   palette: {
     buttonLabel: "Search",

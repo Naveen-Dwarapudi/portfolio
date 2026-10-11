@@ -22,7 +22,12 @@ describe("homeStructuredData", () => {
       name: "Bhavani Sankar Naveen Dwarapudi",
       alternateName: "Naveen Dwarapudi",
       jobTitle: homeContent.seo.jobTitle,
-      worksFor: { "@type": "Organization", name: "Aziro Technologies" },
+      worksFor: { "@type": "Organization", name: homeContent.seo.employer },
+      address: {
+        "@type": "PostalAddress",
+        addressRegion: homeContent.seo.region,
+        addressCountry: homeContent.seo.country,
+      },
       url: "https://site.example/",
       email: `mailto:${homeContent.contact.email}`,
       sameAs: [

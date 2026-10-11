@@ -33,6 +33,17 @@ describe("createRateLimiter", () => {
   });
 });
 
+describe("refund", () => {
+  it("gives one slot back, never below zero", () => {
+    const { l } = limiter();
+    for (let i = 0; i < 3; i++) l.hit("a");
+    l.refund("a");
+    expect(l.hit("a")).toEqual({ ok: true });
+    expect(l.hit("a").ok).toBe(false);
+    l.refund("nobody"); // unknown keys are ignored
+  });
+});
+
 describe("clientIp", () => {
   it("prefers the first x-forwarded-for entry", () => {
     const h = new Headers({

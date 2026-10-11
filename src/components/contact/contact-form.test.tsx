@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { homeContent } from "@/content/en";
 import { HONEYPOT_FIELD } from "@/lib/contact/types";
 import type { ContactState } from "@/lib/contact/types";
-import { ContactForm } from "./contact-form";
+import { CHALLENGE_WAIT_MS, ContactForm, TOKEN_WAIT_MS } from "./contact-form";
 
 const copy = homeContent.contact.form;
 const email = homeContent.contact.email;
@@ -24,14 +24,19 @@ vi.stubGlobal(
 /** When false, the token arrives only when a test calls `issueToken`. */
 let autoToken = true;
 let issueToken: ((t: string) => void) | undefined;
+type WidgetOptions = {
+  callback?: (t: string) => void;
+  "expired-callback"?: () => void;
+  "before-interactive-callback"?: () => void;
+};
+let widgetOptions: WidgetOptions | undefined;
 const turnstile = {
-  render: vi.fn(
-    (_el: HTMLElement, opts: { callback?: (t: string) => void }) => {
-      if (autoToken) opts.callback?.("tok-1");
-      else issueToken = opts.callback;
-      return "w1";
-    },
-  ),
+  render: vi.fn((_el: HTMLElement, opts: WidgetOptions) => {
+    widgetOptions = opts;
+    if (autoToken) opts.callback?.("tok-1");
+    else issueToken = opts.callback;
+    return "w1";
+  }),
   reset: vi.fn(),
   remove: vi.fn(),
 };
@@ -41,6 +46,8 @@ vi.mock("./turnstile", () => ({ loadTurnstile: () => loadTurnstile() }));
 beforeEach(() => {
   autoToken = true;
   issueToken = undefined;
+  widgetOptions = undefined;
+  loadTurnstile.mockImplementation(async () => turnstile);
   sendContact.mockReset();
   loadTurnstile.mockClear();
   turnstile.render.mockClear();
@@ -209,5 +216,55 @@ describe("ContactForm", () => {
     ];
     expect(autofillNames).not.toContain(HONEYPOT_FIELD.toLowerCase());
     expect(HONEYPOT_FIELD).not.toMatch(/web|url|site|mail|phone|name|company/i);
+  });
+
+  it("shows the verification alert after the wait when Turnstile can't load", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    loadTurnstile.mockRejectedValue(new Error("blocked"));
+    const f = setup();
+    await fillValid(f);
+    await f.user.click(f.submit);
+    await act(() => vi.advanceTimersByTimeAsync(TOKEN_WAIT_MS));
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      copy.formErrors.verification,
+    );
+    expect(sendContact).not.toHaveBeenCalled();
+    expect(f.submit).not.toHaveAttribute("aria-disabled");
+    vi.useRealTimers();
+  });
+
+  it("keeps waiting while a person solves Cloudflare's challenge", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    autoToken = false;
+    sendContact.mockResolvedValue({ status: "success" });
+    const f = setup();
+    await fillValid(f);
+    await f.user.click(f.submit);
+    await waitFor(() => expect(widgetOptions).toBeDefined());
+    act(() => widgetOptions!["before-interactive-callback"]!());
+    await act(() => vi.advanceTimersByTimeAsync(TOKEN_WAIT_MS + 1000));
+    expect(screen.queryByRole("alert")).toBeNull();
+    await act(async () => issueToken!("tok-solved"));
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      copy.success.heading,
+    );
+    expect(CHALLENGE_WAIT_MS).toBeGreaterThan(TOKEN_WAIT_MS);
+    vi.useRealTimers();
+  });
+
+  it("waits for a fresh token after the old one expires", async () => {
+    sendContact.mockResolvedValue({ status: "success" });
+    const f = setup();
+    await f.user.click(f.name); // loads Turnstile; token tok-1 issued
+    await waitFor(() => expect(widgetOptions).toBeDefined());
+    act(() => widgetOptions!["expired-callback"]!());
+    await fillValid(f);
+    await f.user.click(f.submit);
+    expect(sendContact).not.toHaveBeenCalled();
+    await act(async () => widgetOptions!.callback!("tok-fresh"));
+    await screen.findByRole("status");
+    expect(sendContact.mock.calls[0]![0].get("cf-turnstile-response")).toBe(
+      "tok-fresh",
+    );
   });
 });

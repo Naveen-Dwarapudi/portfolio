@@ -65,7 +65,8 @@ export async function renderCard(card: Card): Promise<ImageResponse> {
         justifyContent: "space-between",
         gap: 56,
         padding: "0 88px 0 96px",
-        background: `radial-gradient(circle at 85% 20%, rgba(255,138,61,0.16), transparent 55%), ${C.bg}`,
+        // Glow: the accent at 16% alpha (0x29), so it follows the token test.
+        background: `radial-gradient(circle at 85% 20%, ${C.accent}29, transparent 55%), ${C.bg}`,
         color: C.text,
         fontFamily: "Geist",
         position: "relative",

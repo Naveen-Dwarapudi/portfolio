@@ -97,4 +97,9 @@ describe("rankCommands", () => {
     expect(best("github")).toBe("action:github");
     expect(best("wrhs")).toBe("work:warehouse-mobile-migration");
   });
+
+  it("finds languages by their English names", () => {
+    expect(ids("hindi")).toContain("language:hi");
+    expect(ids("telugu")).toContain("language:te");
+  });
 });

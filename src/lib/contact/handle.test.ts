@@ -148,4 +148,44 @@ describe("handleContact", () => {
     expect(log).toHaveBeenCalledWith("info", "sent");
     expect(JSON.stringify(log.mock.calls)).not.toContain("Hello there");
   });
+
+  it("refunds the rate-limit slot when sending fails (our fault)", async () => {
+    const refund = vi.fn();
+    await handleContact(
+      form(),
+      deps({
+        fetch: network({ sent: false }),
+        limiter: { hit: () => ({ ok: true }), refund },
+      }),
+    );
+    expect(refund).toHaveBeenCalledWith("203.0.113.7");
+  });
+
+  it("doesn't refund a failed human check", async () => {
+    const refund = vi.fn();
+    await handleContact(
+      form(),
+      deps({
+        fetch: network({ human: false }),
+        limiter: { hit: () => ({ ok: true }), refund },
+      }),
+    );
+    expect(refund).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ["TURNSTILE_SECRET_KEY", { turnstileSecret: undefined }, "verification"],
+    ["RESEND_API_KEY", { resendApiKey: undefined }, "sendFailed"],
+  ] as const)(
+    "logs a missing %s as misconfiguration",
+    async (name, env, formError) => {
+      const log = vi.fn();
+      const result = await handleContact(
+        form(),
+        deps({ env: { ...live, ...env }, log }),
+      );
+      expect(result).toMatchObject({ formError });
+      expect(log).toHaveBeenCalledWith("warn", `misconfigured: ${name}`);
+    },
+  );
 });

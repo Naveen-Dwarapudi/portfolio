@@ -50,7 +50,7 @@ describe("ButtonLink accent variant", () => {
     const cls = screen.getByRole("link", { name: "Accent" }).className;
     for (const c of [
       "border-accent/50",
-      "bg-accent/8",
+      "bg-[color-mix(in_srgb,var(--accent)_8%,var(--surface))]",
       "text-accent",
       "hover:bg-accent",
       "hover:text-on-accent",

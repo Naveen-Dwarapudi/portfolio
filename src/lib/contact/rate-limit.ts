@@ -35,6 +35,11 @@ export function createRateLimiter({
       bucket.count += 1;
       return { ok: true };
     },
+    /** Gives one slot back to `key` (never below zero). */
+    refund(key: string) {
+      const bucket = buckets.get(key);
+      if (bucket && bucket.count > 0) bucket.count -= 1;
+    },
     /** For tests: number of live buckets. */
     size: () => buckets.size,
   };

@@ -156,7 +156,7 @@ Home is a single scrolling narrative. Each engagement gets a dedicated route.
 /work/healthcare-ecommerce-app   Healthcare e-commerce mobile app
 /work/support-ticket-system      Independent MERN application
 
-/resume                          Embedded viewer + download
+/resume                          (dropped in phase 9: the hero's Download resume link serves the PDF)
 
 Localized variants: /hi/*, /te/*
 ```
@@ -233,7 +233,7 @@ recruiter. So:
 - The same rule applies to this public repository: code, content, docs and
   commit messages.
 - **Exception: the resume PDF.** The owner shares the resume (which names
-  clients) with recruiters, so it stays downloadable from `/resume`. The PDF is
+  clients) with recruiters, so it stays downloadable from the hero's Download resume link. The PDF is
   served with `X-Robots-Tag: noindex` (phase 8) so it doesn't surface client names
   in search results. The site's own pages never repeat the names.
 

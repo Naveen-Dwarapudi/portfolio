@@ -44,3 +44,41 @@ test("content is complete when app JavaScript fails to load", async ({
     }),
   ).toBeVisible();
 });
+
+for (const route of ["/", "/work/warehouse-mobile-migration"]) {
+  test(`reduced motion on ${route}: nothing animates on load, scroll or theme switch`, async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(route);
+    await page.waitForLoadState("networkidle");
+    const running = () =>
+      page.evaluate(
+        () =>
+          document.getAnimations().filter((a) => a.playState === "running")
+            .length,
+      );
+    expect(await running()).toBe(0);
+    expect(
+      await page.evaluate(
+        () => getComputedStyle(document.documentElement).scrollBehavior,
+      ),
+    ).toBe("auto");
+    // Reveal content is fully visible without scrolling.
+    const hidden = await page.evaluate(
+      () =>
+        [
+          ...document.querySelectorAll<HTMLElement>(
+            ".scroll-reveal, .fade-up, .dg-part",
+          ),
+        ].filter((el) => Number(getComputedStyle(el).opacity) < 1).length,
+    );
+    expect(hidden).toBe(0);
+    await page.mouse.wheel(0, 2500);
+    expect(await running()).toBe(0);
+    await page
+      .getByRole("button", { name: /^Switch to (light|dark) theme$/ })
+      .click();
+    expect(await running()).toBe(0);
+  });
+}

@@ -10,6 +10,7 @@ import {
   useSyncExternalStore,
 } from "react";
 import type { PaletteInput } from "@/lib/palette/commands";
+import { isPaletteShortcut } from "@/lib/palette/keys";
 
 const CommandPalette = lazy(() => import("./command-palette"));
 
@@ -43,16 +44,10 @@ export function PaletteTrigger({ input }: { input: PaletteInput }) {
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
-      if (event.isComposing) return;
-      if (
-        (event.metaKey || event.ctrlKey) &&
-        !event.altKey &&
-        event.key.toLowerCase() === "k"
-      ) {
-        event.preventDefault();
-        if (open) setOpen(false);
-        else show();
-      }
+      if (!isPaletteShortcut(event, isApple())) return;
+      event.preventDefault();
+      if (open) setOpen(false);
+      else show();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
