@@ -43,6 +43,7 @@ This Next version differs from older training data. Read the bundled docs in `no
 - The site header is rendered by each page (it needs the page's path for the language switcher), not by the layout. Every 404 is `src/app/global-not-found.tsx`.
 - Command palette: `src/components/palette/` (the trigger is always loaded; `command-palette.tsx` is lazy). Commands are data from `src/lib/palette/commands.ts`, ranked by `rank.ts`; pages pass `paletteData(getContent(locale))` to `SiteHeader`. Theme changes go through `src/lib/theme-switch.ts`, clipboard writes through `src/lib/clipboard.ts`.
 - Buttons: `primary` (solid) > `accent` (orange outline on an 8% tint, AA-checked by `src/test/accent-contrast.test.ts`) > `secondary`.
+- Contact form: `src/components/contact/contact-form.tsx` posts to `src/app/api/contact/route.ts` (same-origin check, 32 KB cap), which runs `handleContact` in `src/lib/contact/` (honeypot → Zod → in-memory rate limit → Turnstile → Resend). Browser rules in `rules.ts` must stay in step with `schema.ts` (parity test). Turnstile loads on first focus only. Tests use `CONTACT_DRY_RUN=1` (ignored in production) and stub Cloudflare's script. Don't call Server Actions from client components: the action runtime costs ~10 KB on every page.
 - jsdom test helpers: `mockMatchMedia([...queries])` from `@/test/setup`; storage and `data-theme` reset after each test.
 
 ## What this is
@@ -51,7 +52,7 @@ A Next.js personal portfolio for a React / React Native engineer, aimed at senio
 
 ## Planned stack (see spec §3)
 
-Next.js App Router · TypeScript `strict` · Tailwind CSS v4 (CSS-first `@theme`, **no `tailwind.config.js`**) · Motion · no i18n library (Next's [lang] + Proxy pattern) · hand-built command palette (native <dialog>) · Server Actions + Zod + react-hook-form · Resend · Vitest + RTL · Playwright + axe-core · Lighthouse CI · lucide-react.
+Next.js App Router · TypeScript `strict` · Tailwind CSS v4 (CSS-first `@theme`, **no `tailwind.config.js`**) · Motion · no i18n library (Next's [lang] + Proxy pattern) · hand-built command palette (native <dialog>) · Route Handler + Zod (server only) · Resend REST · Vitest + RTL · Playwright + axe-core · Lighthouse CI · lucide-react.
 
 Resolve version numbers against the registry at implementation time. They are not pinned in the spec.
 
@@ -64,7 +65,7 @@ Resolve version numbers against the registry at implementation time. They are no
 - **Case studies share one fixed spine:** Context → My role → Problem → Approach (anchored by one diagram) → Key decisions (2–4, each with its tradeoff) → Impact → Stack.
 - **Signature diagrams:** three hand-authored inline SVGs (two-tier RBAC, Ionic→RN migration, ticket lifecycle). They assemble step by step on scroll and are themed via CSS custom properties, never as separate asset files.
 - **Absolute URLs** (metadata, OG, sitemap, hreflang) derive only from `NEXT_PUBLIC_SITE_URL`. Never hardcode a domain.
-- **Contact form:** a Server Action with Zod validation, sent via Resend, with a honeypot, Cloudflare Turnstile, and a per-IP rate limit.
+- **Contact form:** a Route Handler (`POST /api/contact`) with server-side Zod validation, sent via Resend, with a honeypot, Cloudflare Turnstile (loaded on first focus), and a best-effort in-memory per-IP rate limit.
 - Noto Sans Telugu and Noto Sans Devanagari load **only** on their own locales.
 
 ## Hard constraints

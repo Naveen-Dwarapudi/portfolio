@@ -1,7 +1,7 @@
 # Design: Contact Form (Phase 7)
 
 **Date:** 2026-10-11
-**Status:** Draft — awaiting owner review
+**Status:** Approved (owner, 2026-10-11)
 **Parent spec:** `2026-09-19-nextjs-portfolio-design.md` (§3 stack, §7 budgets, §10 testing)
 **Branch:** `feat/contact`
 
@@ -76,7 +76,7 @@ link, Copy email, LinkedIn and GitHub stay as alternatives.
 | Email | `email` | required, valid address, ≤ 254 chars | `email` |
 | Message | `textarea` (6 rows) | 10–2000 chars; live `n / 2000` counter | `off` |
 
-- **Honeypot:** a `website` text input.
+- **Honeypot:** a `hp_extra` text input.
   - It is off-screen (not `display: none`, which some bots skip), with
     `tabIndex={-1}`, `autoComplete="off"` and `aria-hidden="true"` on its
     wrapper.
@@ -135,7 +135,7 @@ link, Copy email, LinkedIn and GitHub stay as alternatives.
 
 ### 3.1 Server pipeline (`sendContact`)
 
-1. **Honeypot:** if `website` is non-empty, return `{ status: "success" }`
+1. **Honeypot:** if `hp_extra` is non-empty, return `{ status: "success" }`
    without sending. Bots learn nothing.
 2. **Validate with Zod.** On failure, return
    `{ status: "error", fieldErrors, values }`.
@@ -299,3 +299,8 @@ inject the configuration directly.
 | Honeypot hit | Fake success | doesn't teach bots |
 | Test strategy | `CONTACT_DRY_RUN` (ignored in production) plus a stubbed Turnstile | deterministic CI with no network or secrets |
 | No-JS | `<noscript>` points to the email address | Turnstile can't run without JS |
+| Endpoint | Route Handler `POST /api/contact` plus client `fetch`, not a Server Action | a client-invoked Server Action pulled 9.8 KB of action runtime into every page; home LCP best 2482 → 2329 ms without it |
+| CSRF / size | `isSameOrigin` check and a 32 KB body cap in the handler | replaces the Server Action's built-in Origin check |
+| Lazy form chunk | rejected | no measurable LCP gain; the runtime, not the form, was the cost |
+| Honeypot name | `hp_extra`, not `website` | password managers autofill "website", which would silently drop real messages (final review) |
+| Pending feedback | "Sending…" text from submit through the human check; no spinner | text is clear and motion-free; the wait for Turnstile must show progress so a second click can't double-send |
