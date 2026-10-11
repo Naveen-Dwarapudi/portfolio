@@ -12,6 +12,7 @@ describe("proxy matcher", () => {
       "/_next/static/chunks/a.js",
       "/_next/image",
       "/icon.svg",
+      "/api/contact",
       RESUME_PATH,
     ]) {
       expect(matcher.test(path), path).toBe(false);

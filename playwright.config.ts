@@ -17,5 +17,7 @@ export default defineConfig({
     command: `npm run start -- --port ${PORT}`,
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
+    // Contact form: no Cloudflare or Resend calls in tests (ignored in production).
+    env: { CONTACT_DRY_RUN: "1" },
   },
 });
