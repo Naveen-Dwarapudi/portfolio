@@ -45,6 +45,8 @@ This Next version differs from older training data. Read the bundled docs in `no
 - Buttons: `primary` (solid) > `accent` (orange outline on an 8% tint, AA-checked by `src/test/accent-contrast.test.ts`) > `secondary`.
 - Contact form: `src/components/contact/contact-form.tsx` posts to `src/app/api/contact/route.ts` (same-origin check, 32 KB cap), which runs `handleContact` in `src/lib/contact/` (honeypot → Zod → in-memory rate limit → Turnstile → Resend). Browser rules in `rules.ts` must stay in step with `schema.ts` (parity test). Turnstile loads on first focus only. Tests use `CONTACT_DRY_RUN=1` (ignored in production) and stub Cloudflare's script. Don't call Server Actions from client components: the action runtime costs ~10 KB on every page.
 - SEO: every page's metadata goes through `pageMetadata` (`src/lib/seo.ts`); JSON-LD through `src/lib/structured-data.ts` + `<JsonLd>`. Share cards are `opengraph-image.tsx` files rendered by `src/lib/og/card.tsx` at build time (fonts in `src/fonts/og/`, read at module load; colours in `src/lib/og/colors.ts`, test-pinned to the tokens). New root metadata files need a Proxy matcher exclusion; `/en/...` share-image URLs pass through via `isShareImage`.
+- Palette keys: `src/lib/palette/keys.ts` (`isPaletteShortcut`: ⌘K on Apple, Ctrl+K elsewhere; typed letter first, physical `KeyK` only for non-Latin layouts; `composing` guards IME incl. Safari keyCode 229). E2E presses `ControlOrMeta+k`.
+- Card spotlight strength is the `--card-glow` token (22% dark, 10% light); the accent button tint is opaque. `src/test/accent-contrast.test.ts` pins both — axe can't measure gradients.
 - jsdom test helpers: `mockMatchMedia([...queries])` from `@/test/setup`; storage and `data-theme` reset after each test.
 
 ## What this is
@@ -61,7 +63,7 @@ Resolve version numbers against the registry at implementation time. They are no
 
 ## Architecture (planned)
 
-- **Routes:** `/` is a single scrolling narrative. `/work/<slug>` holds six case studies (pharma-enterprise-portals, municipal-bill-payment, workflow-portal, warehouse-mobile-migration, healthcare-ecommerce-app, support-ticket-system). `/resume` is a viewer plus download. Pages live under `src/app/[lang]/`. English is served unprefixed via `src/proxy.ts` (`/en/...` → 308 → unprefixed); other locales use a `/hi`, `/te` prefix and 404 until `published` in `src/content/locales.ts`.
+- **Routes:** `/` is a single scrolling narrative. `/work/<slug>` holds six case studies (pharma-enterprise-portals, municipal-bill-payment, workflow-portal, warehouse-mobile-migration, healthcare-ecommerce-app, support-ticket-system). The resume is a download only (the hero button); no `/resume` page. Pages live under `src/app/[lang]/`. English is served unprefixed via `src/proxy.ts` (`/en/...` → 308 → unprefixed); other locales use a `/hi`, `/te` prefix and 404 until `published` in `src/content/locales.ts`.
 - **Content is typed TypeScript modules per locale** (`src/content/<locale>/`, read via `getContent(locale)`), not prose files. A missing translation fails `tsc`. `hi` and `te` re-export English until translated. Publishing runbook: i18n spec §6.
 - **Case studies share one fixed spine:** Context → My role → Problem → Approach (anchored by one diagram) → Key decisions (2–4, each with its tradeoff) → Impact → Stack.
 - **Signature diagrams:** three hand-authored inline SVGs (two-tier RBAC, Ionic→RN migration, ticket lifecycle). They assemble step by step on scroll and are themed via CSS custom properties, never as separate asset files.

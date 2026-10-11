@@ -1,7 +1,7 @@
 # Design: Polish (Phase 9)
 
 **Date:** 2026-10-11
-**Status:** Draft — awaiting owner review
+**Status:** Approved (owner, 2026-10-11)
 **Parent spec:** `2026-09-19-nextjs-portfolio-design.md` (§11 phase 9: a11y audit, reduced-motion pass, Lighthouse budget)
 **Branch:** `feat/polish`
 
@@ -44,13 +44,13 @@ give a client-naming PDF more prominence. Parent §2's route table is amended.
 | # | From | Fix |
 |---|---|---|
 | B1 | Phase 6 | **English names find languages:** `LOCALES` gains `englishName` ("English", "Hindi", "Telugu"), added to each language command's keywords. "hindi" now finds हिन्दी. |
-| B2 | Phase 6 | **Shortcut per platform:** ⌘K on Apple devices and Ctrl+K elsewhere. Ctrl+K on a Mac keeps the system "delete to end of line" in text fields. The key match uses `event.code === "KeyK"` (or `event.key` when it is `k`/`K`), so non-Latin keyboard layouts work. Repeats and Shift/Alt combinations are ignored. |
+| B2 | Phase 6 | **Shortcut per platform:** ⌘K on Apple devices and Ctrl+K elsewhere. Ctrl+K on a Mac keeps the system "delete to end of line" in text fields. The typed letter (`event.key`) decides on Latin layouts, so Dvorak's Ctrl+T stays "new tab"; `event.code === "KeyK"` is the fallback only when the layout types a non-Latin character. Repeats and Shift/Alt combinations are ignored. |
 | B3 | Phase 6 | **Copy-close timer:** the timer is stored in a ref and cleared when the palette closes or reopens. A palette reopened within 600 ms after "Copy email" no longer shuts on its own. |
 | B4 | Phase 6 | **IME guard:** Enter or K with `isComposing` **or** `keyCode === 229` is ignored in the palette input and the global shortcut handler. In Safari, the Enter that commits a Japanese, Chinese or Indic composition no longer runs a command. |
 | B5 | Phase 7 | **Turnstile challenge time:** if Cloudflare shows its interactive challenge (`before-interactive-callback`), the submit waits up to **2 minutes** instead of 8 s. Visitors solving the challenge don't see a false alert. |
 | B6 | Phase 7 | **Turnstile loader retry:** if the script loads but `window.turnstile` is missing (for example, an ad blocker's stub script), the loader resets and the failed `<script>` element is removed. A later focus retries without piling up script tags. |
 | B7 | Phase 7 | **Refund on failed send:** when Resend fails (`sendFailed`), the visitor's rate-limit slot is refunded, because a server-side failure shouldn't lock a real person out. Verification failures still count. |
-| B8 | Phase 6 | **Glow behind content:** the project-card spotlight (`.card-glow`) paints **behind** the card content, not over it. Accent text and buttons keep full contrast while the pointer is near (axe runs with the pointer over a card). |
+| B8 | Phase 6 | **Glow contrast:** the spotlight was already behind the content; its 22% accent wash, seen through the accent button's translucent tint, was the cause. The tint is now opaque and the glow is a theme token (`--card-glow`: 22% dark, 10% light), so accent text and buttons stay AA under the pointer (pinned by `accent-contrast.test.ts`). |
 
 ---
 
@@ -86,7 +86,7 @@ On phones the form sits below the line, so it reads "with the form" rather than
   - axe on 8 routes × 2 themes;
   - the header keyboard order;
   - a visible focus ring (`outline-style` not `none`) on each stop;
-  - axe with the pointer over a project card (B8).
+  - (B8 is pinned by the unit contrast test: axe can't measure contrast over a gradient.)
 - **E2E `motion.spec.ts`** (extended): the reduced-motion invariants on `/`
   and on a case study.
 - **Unit:** one test per fix B1–B7 and C1–C6, written to fail first.
@@ -99,5 +99,7 @@ On phones the form sits below the line, so it reads "with the form" rather than
 | Decision | Choice | Why |
 |---|---|---|
 | `/resume` viewer | Skipped | low value on phones; the download already exists; it would give the client-naming PDF more prominence |
-| Shortcut | ⌘K on Apple, Ctrl+K elsewhere, matched by `KeyK` | keeps Mac text editing intact; works on non-Latin layouts |
-| Rate-limit refund | Only on `sendFailed` | server faults shouldn't lock out people; failed verifications stay counted |
+| Shortcut | ⌘K on Apple, Ctrl+K elsewhere; typed letter first, physical `KeyK` only for non-Latin layouts | keeps Mac text editing and Dvorak shortcuts intact; works on non-Latin layouts |
+| Rate-limit refund | On `sendFailed` and on a missing key (misconfiguration) | server and owner faults shouldn't lock out people; failed verifications stay counted |
+| Glow fix (final) | Opaque accent tint + `--card-glow` 22% dark / 10% light | the glow was already behind the text; the 22% wash (seen through a translucent tint) was the cause |
+| Glow test | Unit contrast test only; no e2e | axe can't measure contrast over a gradient (a prototype e2e passed on the broken code) |
