@@ -487,6 +487,36 @@ body::after {
   }
 }
 
+/* Command palette. The input is the dialog's only focus target and always
+   focused (caret plus highlighted option show where you are), so it drops the
+   global ring, which would sit clipped inside the card. */
+.palette input:focus-visible {
+  outline: none;
+}
+
+/* Command palette: a short fade and scale on open (no motion if reduced). */
+@media (prefers-reduced-motion: no-preference) {
+  .palette[open] {
+    animation: palette-in 180ms var(--ease-spring) both;
+  }
+  .palette[open]::backdrop {
+    animation: palette-fade 180ms ease-out both;
+  }
+}
+
+@keyframes palette-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+}
+
+@keyframes palette-fade {
+  from {
+    opacity: 0;
+  }
+}
+
 /* Theme wipe: drop the browser's default cross-fade so only the clip-path
    circle is visible. Scoped to .theme-wipe (set by theme-toggle.tsx while the
    wipe runs) so page-to-page navigation keeps its cross-fade. */

@@ -33,6 +33,20 @@ class NoopIntersectionObserver {
 }
 vi.stubGlobal("IntersectionObserver", NoopIntersectionObserver);
 
+// jsdom has <dialog> but not showModal()/close(); a minimal stand-in so
+// components can open and close it. Real modal behaviour (focus trap, Esc,
+// backdrop) is covered by Playwright.
+if (!HTMLDialogElement.prototype.showModal) {
+  HTMLDialogElement.prototype.showModal = function (this: HTMLDialogElement) {
+    this.setAttribute("open", "");
+  };
+  HTMLDialogElement.prototype.close = function (this: HTMLDialogElement) {
+    if (!this.hasAttribute("open")) return;
+    this.removeAttribute("open");
+    this.dispatchEvent(new Event("close"));
+  };
+}
+
 afterEach(() => {
   cleanup();
   mockMatchMedia();
