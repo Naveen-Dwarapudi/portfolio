@@ -18,10 +18,12 @@ const variants: Record<Variant, string> = {
   secondary:
     "border-line bg-surface/70 text-text backdrop-blur-sm hover:border-line-strong",
   // Orange outline on a faint tint; fills solid on hover. Sits between
-  // primary and secondary in emphasis. 8% is the strongest tint that keeps
-  // light-theme text at AA (src/test/accent-contrast.test.ts reads it here).
+  // primary and secondary in emphasis. The tint is opaque (mixed into
+  // --surface), so a card's spotlight glow can't show through and lower the
+  // text contrast; 8% keeps light-theme text at AA
+  // (src/test/accent-contrast.test.ts reads it here).
   accent:
-    "border-accent/50 bg-accent/8 text-accent hover:border-accent hover:bg-accent hover:text-on-accent",
+    "border-accent/50 bg-[color-mix(in_srgb,var(--accent)_8%,var(--surface))] text-accent hover:border-accent hover:bg-accent hover:text-on-accent",
 };
 
 function Arrow({ children }: { children: ReactNode }) {

@@ -35,3 +35,13 @@ describe("share-card and theme colours match the tokens", () => {
     expect(THEME_COLORS.light).toBe(token(light, "bg"));
   });
 });
+
+describe("share-card renderer", () => {
+  it("takes every colour from OG_COLORS (no stray literals)", () => {
+    const card = readFileSync(
+      join(process.cwd(), "src/lib/og/card.tsx"),
+      "utf8",
+    );
+    expect(card).not.toMatch(/rgba?\(|["'`]#[0-9a-f]{3,8}/i);
+  });
+});
