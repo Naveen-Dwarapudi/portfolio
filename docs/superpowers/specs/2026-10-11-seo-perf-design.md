@@ -1,7 +1,7 @@
 # Design: SEO, Sharing and Performance (Phase 8)
 
 **Date:** 2026-10-11
-**Status:** Draft — awaiting owner review
+**Status:** Approved (owner, 2026-10-11)
 **Parent spec:** `2026-09-19-nextjs-portfolio-design.md` (§2 canonical URL handling, §7 budgets, §11 phase 8)
 **Branch:** `feat/seo-perf`
 
@@ -215,3 +215,9 @@ in the HTML answers 200 with `content-type: image/png` and no 3xx.
 | Metadata | One `pageMetadata` helper | consistent canonical, Open Graph and Twitter on every route |
 | Structured data | Person plus WebSite (home); CreativeWork (case studies) | accurate name and profile links in search, without client names |
 | hreflang | Deferred to locale publish | only English is published |
+| Card fonts (final) | Three static TTFs: Bricolage 800, Geist 400, Geist 500 | satori can't use variable fonts |
+| Card asset loading | Read at module load (top-level await) | reads during render are uncached IO under Cache Components |
+| Share-image URLs | Proxy passes `/en/…/opengraph-image…` through (`isShareImage`) | no redirect on the og:image URL |
+| Portrait audit | No change: 5.5 KB AVIF at the right size | nothing to gain; LCP is dominated by other work |
+| Case-study cards (final) | Rendered on first request, then cached by Next/Vercel; the home card and Apple icon are prerendered | `generateImageMetadata` (needed for the per-title alt text) prevents prerendering; first render is about 40 ms; final review I-1 |
+| CreativeWork author | Named inline (`@type` Person, `name`, `url`) as well as the `@id` | Google doesn't resolve an `@id` defined on another page |
