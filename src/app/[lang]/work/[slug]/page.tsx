@@ -7,6 +7,9 @@ import { getContent } from "@/content";
 import { adjacentCaseStudies, findCaseStudy } from "@/content/case-studies";
 import { requirePublishedLocale } from "@/lib/locale-params";
 import { paletteData } from "@/lib/palette/data";
+import { pageMetadata } from "@/lib/seo";
+import { caseStudyStructuredData } from "@/lib/structured-data";
+import { JsonLd } from "@/components/seo/json-ld";
 
 /**
  * All case studies are prerendered per published locale (the parent [lang]
@@ -22,13 +25,16 @@ export async function generateMetadata({
 }: PageProps<"/[lang]/work/[slug]">): Promise<Metadata> {
   const { lang, slug } = await params;
   const locale = requirePublishedLocale(lang);
-  const { caseStudies, caseStudyUi } = getContent(locale);
+  const { caseStudies, caseStudyUi, homeContent } = getContent(locale);
   const study = findCaseStudy(caseStudies, slug);
   if (!study) return {};
-  return {
+  return pageMetadata({
     title: `${study.title} | ${caseStudyUi.titleSuffix}`,
     description: study.summary,
-  };
+    path: `/work/${slug}`,
+    type: "article",
+    siteName: homeContent.seo.siteName,
+  });
 }
 
 export default async function CaseStudyPage({
@@ -51,6 +57,7 @@ export default async function CaseStudyPage({
         path={`/work/${slug}`}
         palette={paletteData(content)}
       />
+      <JsonLd data={caseStudyStructuredData(study, homeContent)} />
       <main id="main" className="flex-1">
         <CaseStudyArticle
           study={study}
