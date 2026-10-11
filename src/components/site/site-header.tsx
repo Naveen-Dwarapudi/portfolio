@@ -1,5 +1,6 @@
 import { PaletteTrigger } from "@/components/palette/palette-trigger";
 import { LocaleSwitcher } from "@/components/site/locale-switcher";
+import { SectionNav } from "@/components/site/section-nav";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Container } from "@/components/ui/container";
 import { LOCALES, type Locale } from "@/content/locales";
@@ -33,20 +34,16 @@ export function SiteHeader({
           <span className="sr-only"> {site.homeLabel}</span>
         </a>
         <div className="flex items-center gap-3 md:gap-6">
-          <nav aria-label={site.navLabel} className="hidden md:block">
-            <ul className="flex gap-6 text-sm text-muted">
-              {nav.map((item) => (
-                <li key={item.href}>
-                  <a
-                    href={localizedPath(locale, item.href)}
-                    className="transition-colors hover:text-text"
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          {/* Highlights the section in view on the home page only. */}
+          <SectionNav
+            label={site.navLabel}
+            spy={path === "/"}
+            items={nav.map((item) => ({
+              id: item.href.slice(2),
+              label: item.label,
+              href: localizedPath(locale, item.href),
+            }))}
+          />
           <PaletteTrigger
             input={{ ...palette, locale, path, locales: LOCALES }}
           />

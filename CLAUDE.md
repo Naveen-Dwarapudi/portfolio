@@ -39,6 +39,7 @@ This Next version differs from older training data. Read the bundled docs in `no
 - Links with visible text keep that text in their accessible name (WCAG 2.5.3): add context with sr-only text, or start `aria-label` with the visible text.
 - Diagrams: typed `diagram` on a `CaseStudy` (kind-specific labels), SVGs in `src/components/diagrams/`, animation only in `globals.css` (`dg-*`). Parts use `dg-part`/`dg-draw` plus `dg-sN`, where N ≤ the study's step count. Never dim text with opacity in scroll animations; animate the colour between AA-safe tokens.
 - The header is sticky. `--header-h` in `globals.css` drives `scroll-padding-top` and sticky offsets (the diagram stage); update it if the header's height changes.
+- Header nav: `src/components/site/section-nav.tsx` marks the section in view (`aria-current="location"`, accent colour) on the home page only (`spy={path === "/"}`).
 - The site header is rendered by each page (it needs the page's path for the language switcher), not by the layout. Every 404 is `src/app/global-not-found.tsx`.
 - Command palette: `src/components/palette/` (the trigger is always loaded; `command-palette.tsx` is lazy). Commands are data from `src/lib/palette/commands.ts`, ranked by `rank.ts`; pages pass `paletteData(getContent(locale))` to `SiteHeader`. Theme changes go through `src/lib/theme-switch.ts`, clipboard writes through `src/lib/clipboard.ts`.
 - Buttons: `primary` (solid) > `accent` (orange outline on an 8% tint, AA-checked by `src/test/accent-contrast.test.ts`) > `secondary`.

@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { expectNoAxeViolations } from "./axe";
 
 async function headerBottom(page: Page) {
   const box = await page.locator("header").first().boundingBox();
@@ -63,4 +64,71 @@ test("the sticky diagram stage sits below the header", async ({ page }) => {
   expect((await stage.boundingBox())!.y).toBeGreaterThanOrEqual(
     await headerBottom(page),
   );
+});
+
+test.describe("active section in the header nav", () => {
+  const nav = (page: Page) =>
+    page.getByRole("navigation", { name: "Sections" });
+  const current = (page: Page) =>
+    nav(page).locator('[aria-current="location"]');
+
+  test("a clicked link turns orange and is marked current", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+    await expect(current(page)).toHaveCount(0);
+    const link = nav(page).getByRole("link", { name: "Experience" });
+    await link.click();
+    await expect(link).toHaveAttribute("aria-current", "location");
+    const accent = await page.evaluate(() => {
+      const probe = document.createElement("span");
+      probe.style.color = "var(--accent)";
+      document.body.append(probe);
+      const c = getComputedStyle(probe).color;
+      probe.remove();
+      return c;
+    });
+    // The colour eases in (transition-colors), so wait for it to settle.
+    await expect
+      .poll(() => link.evaluate((el) => getComputedStyle(el).color))
+      .toBe(accent);
+    await expect(current(page)).toHaveCount(1);
+  });
+
+  test("the highlight follows scrolling and clears at the top", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+    await page.locator("#skills").evaluate((el) => el.scrollIntoView());
+    await expect(current(page)).toHaveText("Skills");
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await expect(current(page)).toHaveCount(0);
+    await page.evaluate(() =>
+      window.scrollTo(0, document.documentElement.scrollHeight),
+    );
+    await expect(current(page)).toHaveText("Contact");
+  });
+
+  test("no link is current on a case study", async ({ page }) => {
+    await page.goto("/work/pharma-enterprise-portals");
+    await page.waitForLoadState("networkidle");
+    await page.evaluate(() => window.scrollTo(0, 2000));
+    await expect(current(page)).toHaveCount(0);
+  });
+
+  for (const colorScheme of ["light", "dark"] as const) {
+    test(`no WCAG 2.1 AA violations with a current link (${colorScheme})`, async ({
+      page,
+    }) => {
+      await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
+      await page.goto("/");
+      await page.waitForLoadState("networkidle");
+      await nav(page).getByRole("link", { name: "Projects" }).click();
+      await expect(current(page)).toHaveText("Projects");
+      await expectNoAxeViolations(page, 150);
+    });
+  }
 });
