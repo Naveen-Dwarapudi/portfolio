@@ -8,17 +8,26 @@ import { Skills } from "@/components/sections/skills";
 import { SiteHeader } from "@/components/site/site-header";
 import type { Locale } from "@/content/locales";
 import type { HomeContent } from "@/content/types";
+import type { PaletteData } from "@/lib/palette/commands";
 
 export function HomePage({
   content: c,
   locale,
+  palette,
 }: {
   content: HomeContent;
   locale: Locale;
+  palette: PaletteData;
 }) {
   return (
     <>
-      <SiteHeader site={c.site} nav={c.nav} locale={locale} path="/" />
+      <SiteHeader
+        site={c.site}
+        nav={c.nav}
+        locale={locale}
+        path="/"
+        palette={palette}
+      />
       <main id="main" className="flex-1">
         <Hero hero={c.hero} metrics={c.metrics} />
         <About about={c.about} />
