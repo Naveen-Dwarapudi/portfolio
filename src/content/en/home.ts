@@ -248,6 +248,7 @@ export const homeContent: HomeContent = {
       stack: [
         "React.js",
         "TypeScript",
+        "Material-UI",
         "Redux Toolkit",
         "RTK Query",
         "Node.js",
